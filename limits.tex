@@ -1,0 +1,280 @@
+% \documentclass[8pt, a4paper, twocolumn]{article}
+\documentclass[12pt, a4paper]{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{mathtext}
+\usepackage[T1,T2A]{fontenc}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{stmaryrd}
+
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
+
+
+\title{\text{Limits}}
+\date{04-08-2021}
+\author{\text{Vihnin F.}}
+
+\newcommand\setItemnumber[1]{\setcounter{enumi}{\numexpr#1-1\relax}}
+
+\newcommand{\gfun}{\mathbf{g}}
+
+\newcounter{casenum}
+\newenvironment{caseof}{\setcounter{casenum}{1}}{\vskip.5\baselineskip}
+\newcommand{\case}[2]{\vskip.5\baselineskip\par\noindent {\bfseries Случай \arabic{casenum}:} #1\\#2\addtocounter{casenum}{1}}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+\newcommand{\expx}[1]{e^{-|x|^{#1}}}
+\newcommand{\expxpoz}[1]{e^{-x^{#1}}}
+\newcommand{\infint}[1]{\int_{-\infty}^{+\infty} #1 \, dx}
+\newcommand{\infintpoz}[1]{\int_{0}^{+\infty} #1 \, dx}
+
+\newcommand{\underrel}[2]{\mathrel{\mathop{#2}\limits_{#1}}}
+
+\begin{document}
+\maketitle
+\newpage 
+
+\section*{Оценки на матожидание}
+
+Для использования дрифт теорем, нам необходимо, чтобы выполнялись некоторые ограничения на последовательность случайных величин, например следующее:
+$$
+\exists \delta \geq 0,\ c \in \mathbb{R} \ \forall  t \geq 0 \ \forall \gamma \in [0, \delta] : $$$$
+E[e^{\gamma (X_{t + 1} - X_{t})}] \leq e^{\frac{c \gamma^2}{2}},$$
+
+или
+
+$$\exists \delta \geq 0,\ p \geq 1 \ \forall t \geq 0 : $$$$
+E[e^{\gamma (X_{t + 1} - X_{t})}] \leq 1 - \frac{1}{p}\ .$$
+
+Чтобы сравнить строгость требований давайте проанализируем поведение $E[e^{\gamma X}]$ относительно $\gamma$. Так как распределения могут быть любыми, то стоит изучить их по отдельности, и для удобства начнем с непрерывных. 
+
+\subsection*{Непрерывный случай}
+
+Вспомним определение матожидание от функции:
+
+\[
+E[e^{\gamma X}] = \int_{-\infty}^{+\infty} f(x) e^{\gamma x} \,dx,    
+\]
+
+где $f(x)$ - плотность распределения.
+
+\hfill
+
+Рассмотрим первую производную по $\gamma$:
+
+\begin{align*}
+\frac{\partial E[e^{\gamma X}]}{\partial \gamma} &= \frac{\partial}{\partial \gamma} \int_{-\infty}^{+\infty} f(x) e^{\gamma x} \, dx = \int_{-\infty}^{+\infty} f(x) \frac{\partial e^{\gamma x}}{\partial \gamma} \, dx = \int_{-\infty}^{+\infty} x f(x) e^{\gamma x} \, dx = \\
+&= \int_{-\infty}^{0} x f(x) e^{\gamma x} \, dx + \int_{0}^{+\infty} x f(x) e^{\gamma x} \, dx
+\end{align*}
+
+Заметим, что $\forall x \leq 0 : e^{\gamma x} \leq 1$, а для $\forall x \geq 0 : e^{\gamma x} \geq 1 + \gamma x$. В таком случае получается, (так как $\forall x : f(x) \geq 0$): 
+
+\begin{align*}
+    \int_{0}^{+\infty} x f(x) e^{\gamma x} \, dx &\geq \int_{0}^{+\infty} x f(x) (1 + \gamma x)\, dx    \\
+    \int_{-\infty}^{0} x f(x) e^{\gamma x} \, dx &\geq \int_{-\infty}^{0} x f(x)\, dx    
+\end{align*}
+
+В таком случае:
+
+\begin{align*}
+\frac{\partial E[e^{\gamma X}]}{\partial \gamma} &\geq  \int_{0}^{+\infty} x f(x) (1 + \gamma x)\, dx + \int_{-\infty}^{0} x f(x)\, dx  \\
+&= E[X] + \gamma \int_{0}^{+\infty} x^2 f(x) \, dx
+\end{align*}
+
+Назовём $\int_{0}^{+\infty} x^2 f(x) \, dx = c \geq 0$
+
+Тогда если мы проинтегрируем обратно, то получим ограничение на матожидание снизу:
+
+\[
+E[e^{\gamma X}] = E[1] + \int_0^\gamma \frac{\partial E[e^{\gamma X}]}{\partial \gamma} \, d\gamma \geq 1 + \gamma E[X] + \gamma^2 \frac{c}{2}    
+\]
+Рассмотрим несколько случаев:
+
+\begin{caseof}
+    \case{$E[X] > 0.$}{
+
+        В таком случае матожидание экспоненты не может быть ниже 1, а также в окрестности нуля растет быстрее чем любая $e^{\frac{\gamma^2 c }{2}}$, так как: 
+        
+        $$\frac{\partial e^{\frac{\gamma^2 c}{2}}}{\partial \gamma} = c\gamma e^{\frac{\gamma^2 c}{2}} = g(\gamma)$$
+
+        Но $g(0) = 0$, тогда как $E[X] > 0$, следовательно, что в любой окрестности нуля:
+        
+        $$\forall c > 0 \, \exists \gamma_c > 0 \, \forall \gamma \in (0, \gamma_c) : e^{\frac{\gamma^2 c}{2}} < E[e^{\gamma X}]$$
+
+        Следовательно обе границы сверху не выполнимы.
+    }
+    \case{$E[X] < 0$.}{
+
+        В этом случае, аналогично предыдущему случаю, в некоторой окрестности нуля основной вклад в производную вносит именно слагаемое равно матожиданию, так как:
+
+        $$\frac{\partial E[e^{\gamma x}]}{\partial \gamma} \Big|_{\gamma = 0} = E[X] < 0$$
+
+        Но в таком случае выполняются оба ограничения! Так как:
+
+        $$\exists \gamma_0 > 0 : \forall \gamma \in (0, \gamma_0) : E[e^{\gamma X}] < 1$$
+
+        Так что доказательство того, что процесс является сабгауссовым, равносильно нахождению $p$ во втором органичении.
+
+
+        }
+    \case{$E[X] = 0.$}{
+
+        Второе ограничение явно не выполянется, так как матожидание экпоненты положительное, то вот точно ли не выполняется ограничение 1 еще предстоит узнать. Этот вопрос будет рассмотрен в $\hyperref[sec:zero]{\text{соотвествующем параграфе}}$.
+    }
+\end{caseof}
+
+\subsection*{Дискретный случай}
+
+Аналогично вспомним определение матожидания:
+
+\begin{align*}
+    E[e^{\gamma X}] = \sum_{i = 1}^{+\infty} e^{\gamma x_i} Pr[x = x_i],
+\end{align*}
+
+где $Pr$ - функция вероятности.
+
+\hfill
+
+Аналогично рассмотрим множество $P = \{i \in \mathbb{N}: x_i \geq 0\}$. Тогда можно переписать: 
+
+\begin{align*}
+    E[e^{\gamma X}] = \sum_{i = 1}^{+\infty} e^{\gamma x_i} Pr[x = x_i] = \sum_{i \in P} e^{\gamma x_i} Pr[x = x_i] + \sum_{i \in \mathbb{N}\setminus P} e^{\gamma x_i} Pr[x = x_i],
+\end{align*}
+
+В таком случае, аналогично возьмем производную и рассмотрим пот отдельности слагаемые из множества P и остальные:
+
+\begin{align*}
+    \frac{\partial E[e^{\gamma X}]}{\partial \gamma} &= \sum_{i = 1}^{+\infty} \frac{\partial e^{\gamma x_i}}{\partial \gamma} Pr[x = x_i] = \sum_{i = 1}^{+\infty} x_i e^{\gamma x_i} Pr[x = x_i] \\
+    &= \sum_{i \in P} x_i e^{\gamma x_i} Pr[x = x_i] + \sum_{i \in \mathbb{N}\setminus P} x_i e^{\gamma x_i} Pr[x = x_i] \\
+    &\geq \sum_{i \in P} x_i (1 + {\gamma x_i}) Pr[x = x_i] + \sum_{i \in \mathbb{N}\setminus P} x_i Pr[x = x_i] \\
+    &= E[X] + \gamma\sum_{i \in P} x_i^2 Pr[x = x_i]
+\end{align*}
+
+Также обозначим, $c = \sum_{i \in P} x_i^2 Pr[x = x_i] \geq 0$ и тогда ровно также: 
+
+\[
+E[e^{\gamma X}] \geq 1 + \gamma E[X] + \gamma^2 \frac{c}{2}  
+\]
+
+Дальнейшие выводы ровно те же, что в непрерывном случае.
+
+\section*{Случай 0-ого матожидания}
+\label{sec:zero}
+
+Здесь я буду рассматривать случай симметричных функций плотности вероятности, так как их матожидание точно 0. Далее я обобщу на более общий случай.
+
+\subsection*{Экспоненты от степеней икса}
+
+Давайте рассмотрим функции вида
+
+$$f(x) = c \expx{a},\ a > 0$$
+
+Определим $c$
+
+\begin{align*}
+    \infint{f(x)} &= \infint{c\expx{a}} = 1
+\end{align*}
+
+\begin{align*}
+    \infint{\expx{a}} = 2\infintpoz{\expxpoz{a}}
+\end{align*}
+
+Сделаем замену
+
+\begin{align*}
+    u &= x^a \\
+    du &= dx\,(a x^{a - 1}) = dx\,(a u^{1 - \frac{1}{a}})
+\end{align*}
+
+В таком случае
+
+\begin{align*}
+    2\infintpoz{\expxpoz{a}} = \frac{2}{a} \infintpoz{e^{-u}u^{\frac{1}{a} - 1}} = \frac{2\Gamma(\frac{1}{a})}{a}
+\end{align*}
+
+Откуда делаем вывод, что $c = \frac{a}{2\Gamma(\frac{1}{a})}
+$ и 
+
+$$f(x) = \frac{a}{2\Gamma(\frac{1}{a})} \expx{a}$$
+
+Давайте найдем в таком случае n-ый момент (матожидание от $X^a$): 
+
+\begin{align*}
+    E[X^n] = \infint{f(x) x^n} = \frac{\Gamma(\frac{n + 1}{a})}{2\Gamma(\frac{1}{a})} (1 + (-1)^n)
+\end{align*}
+
+Теперь мы можем рассмотреть матожидание от $e^{\gamma X}$ в качестве ряда.
+
+\begin{align*}
+    E[e^{\gamma X}] = E\left[\sum_{n = 0}^{+\infty}\frac{(\gamma X)^n}{n!}\right] &= \sum_{n = 0}^{+\infty}\gamma^n\frac{E[X^n]}{n!} = \sum_{n = 0}^{+\infty}\gamma^{2n}\frac{E[X^{2n}]}{2n!} =\\
+    &= \sum_{n = 0}^{+\infty}\frac{(\gamma^2)^{n}}{n!}\left(\frac{E[X^{2n}]n!}{2n!}\right) = \sum_{n = 0}^{+\infty}\frac{(\gamma^2)^{n}}{n!} a_n
+\end{align*}
+
+Третье равенство выполняется, так как все моменты нечётной степени равны нулю в силу симметричности функции.
+
+Рассмотрим предел последовательности $\{\sqrt[n]{a_n}\}$:
+
+\begin{align*}
+    A = \lim_{n \to +\infty} \sqrt[n]{a_n} &= \lim_{n \to +\infty} \sqrt[n]{\frac{n! E[X^{2n}]}{2n!}} = 
+    \lim_{n \to +\infty} \sqrt[n]{
+        \frac{
+            \left(\frac{n}{e}\right)^n \sqrt{2\pi n} \
+            \Gamma\left(\frac{2n + 1}{a}\right)}{
+                \left(\frac{2n}{e}\right)^{2n} \sqrt{4\pi n}\ \Gamma\left(\frac{1}{a}\right)}
+        }\\
+    &= \lim_{n \to +\infty} \frac{n}{e} \frac{e^2}{4n^2} \sqrt[n]{\Gamma\left(\frac{2n + 1}{a}\right)} \simeq \lim_{n \to +\infty}  \frac{e}{4n} \sqrt[n]{\left(\frac{2n + 1}{ae}\right)^{\frac{2n + 1}{a}}} \\
+    &= \lim_{n \to +\infty} \frac{e}{4n} \left(\frac{2n}{ae}\right)^{\frac{2}{a}} = \left(\frac{e^{1 - \frac{2}{a}}}{2^{2 - \frac{2}{a}} a^\frac{2}{a}}\right) \lim_{n \to +\infty} n^{\frac{2}{a} - 1}
+\end{align*}
+
+Рассмотрим случаи относительно значения а: 
+\begin{caseof}
+    \case{$a \geq 2$}{
+
+        Тогда $A$ существует и конечно, что значит, что существует такое $C > 0$, такое что 
+        $$\forall n \geq 0 : a_n \leq C^n$$
+
+        Следовательно 
+
+        $$E[e^{\gamma X}] \leq e^{\gamma^2 C}$$
+    }
+    \case{$a < 2$}{
+
+        Предела не существует, а значит ничего утверждать про сабгаусовость нельзя. 
+    }
+\end{caseof}
+
+Если провести аналогичные вычисления но для последовательности $\{\sqrt[n]{\frac{a_n}{n!}}\}$, то порогом, относительно $a$, будет 1, где только при $a \geq 1$, ряд сходится.
+
+В таком случае остается выяснить, что происходит на отрезке $a \in (1, 2)$. Для этого воспользуемся другим определением сабгаусовости:
+
+$$\exists K > 0 \ \forall p \geq 1: \left(E[X^p]\right)^{\frac{1}{p}} \leq K \sqrt{p}$$ 
+
+
+Вычислим (будем считать $p\ \vdots\ 2$): 
+
+\begin{align*}
+    E[X^p] &= \frac{\Gamma\left(\frac{p + 1}{a}\right)}{\Gamma\left(\frac{1}{a}\right)} \\
+    E[X^p]^\frac{1}{p} &\underrel{p \to +\infty} {=} \left(\frac{p}{e a}\right)^{\frac{p}{a} \frac{1}{p}} = \mathcal{O}(p^\frac{1}{a})
+\end{align*}
+
+Для $a \in (1, 2)$ очевидно, что асимптотика больше, чем у корня, так что сабгаусовость не наблюдается.
+
+\section*{Заключение}
+
+В случае $\textbf{\text{нулевого}}$ матожидания гарантировать сабгаусовость всегда мы не можем, что было доказано примером серии четных функций $\expx{a}$.
+
+В случае $\textbf{\text{положительного}}$ матожидания оба критерия не выполнимы, а если оно $\textbf{\text{отрицательное}}$, то оба выполнятся.
+
+\end{document}
