@@ -5,7 +5,7 @@
 \usepackage{amssymb}
 \usepackage{amsthm}
 \usepackage[utf8]{inputenc}
-\usepackage[english,russian]{babel}
+\usepackage[english]{babel}
 \usepackage{indentfirst}
 \usepackage{graphicx}
 \usepackage{mathtext}
@@ -13,12 +13,13 @@
 \usepackage{listings}
 \usepackage{hyperref}
 \usepackage{stmaryrd}
+\usepackage{a4wide}
 
 \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
 
-\title{\text{Limits}}
-\date{04-08-2021}
-\author{\text{Vihnin F.}}
+\title{\text{Additive drift with tail bounds}}
+
+% \date{04-08-2021}
 
 \newcommand\setItemnumber[1]{\setcounter{enumi}{\numexpr#1-1\relax}}
 
@@ -38,14 +39,94 @@
 \newcommand{\expxpoz}[1]{e^{-x^{#1}}}
 \newcommand{\infint}[1]{\int_{-\infty}^{+\infty} #1 \, dx}
 \newcommand{\infintpoz}[1]{\int_{0}^{+\infty} #1 \, dx}
+\newcommand{\cm}{coming soon\dots}
 
 \newcommand{\underrel}[2]{\mathrel{\mathop{#2}\limits_{#1}}}
 
+\author{Vihnin F.
+    \and Antipov D.
+    \and Sinyachenko N.}
+
+
 \begin{document}
 \maketitle
-\newpage 
 
-\section*{Оценки на матожидание}
+\section{Introduction}
+\cm
+
+\section{Existing tools}
+\cm
+\subsection{Negative drift}
+\begin{theorem}[Drift Theorem for Lower Bounds] \label{thm:neat}
+    Let $\{X_t\}_{t \ge 0}$ be a Markow process over a set of states $\mathbb{S}$, and $\mathbf{g} : \mathbb{S} \rightarrow \mathbb{R}$ a function that assigns to every state a non-negative real numbers. Pick two real numbers $a(l)$ and $b(l)$ which depend on a parameter $l \in \mathbb{R}^+$ such that $0 < a(l) < b(l)$ holds and let the random variable $T$ denote
+    the earliest point in time $t \ge 0$ where $\mathbf{g}(X_t) \leq a(l)$ holds.
+    
+    If there are constants $\lambda > 0$ and $D \ge 1$ and a polynomial $p(l)$ taking only positive values, for which the following four conditions hold
+
+    \begin{enumerate}
+        \item $\gfun(X_0) \ge b(l)$
+        \item $\forall t \ge 0 : E[e^{-\lambda(\gfun(X_{t + 1} - \gfun(X_t)))} |\ X_t,\ \gfun(X_t) < b(l)] \leq 1 - \frac{1}{p(l)} = \rho$
+        \item $\forall t \ge 0 : E[e^{-\lambda(\gfun(X_{t + 1} - b(l)))} |\ X_t,\ \gfun(X_t) \ge b(l)] \leq D$
+    \end{enumerate}
+    then for all time bounds $B \ge 0$, the following upper bound on probability for random variable $T$:
+
+    \begin{equation}
+        \Pr[T \leq B] \leq e^{\lambda(a(l) - b(l))} \cdot B \cdot D \cdot p(l)
+    \end{equation}
+\end{theorem}
+
+To prove this theorem we need to use following lemma
+
+\begin{lemma}[Hajek lemma 2.8] \label{lm:haj}
+    If conditions 2 and 3 are met, then
+
+    $$\forall t \ge 0 :\Pr[\gfun(X_t) \leq a(l)] \leq \rho^te^{\lambda(a(l) - \gfun(X_0))} + \frac{1 - \rho^t}{1 - \rho} D e^{\lambda(a(l) - b(l))}$$
+    
+\end{lemma}
+
+\begin{proof}[Proof of Theorem \ref{thm:neat}]
+    
+    First of all we need to describe fact that time $T$ is less or equals $B$. It means that at any time $t \leq B$  event $\gfun(X_t) \leq a$ could have happened for first time, then
+
+    % \[
+    %     \Pr[T \leq B] = \sum_{k=1}^{B} \Pr[\gfun(X_k) \leq a \land \gfun(X_{k - 1}) > a \land ... \land \gfun(X_0) > a)] 
+    % \]
+    
+    \begin{align*}
+        \Pr[T \leq B] &= \sum_{k=1}^{B} \Pr[T = k] \\
+        &= \sum_{k=1}^{B} \Pr[\gfun(X_k) \leq a \land \gfun(X_{k - 1}) > a \land ... \land \gfun(X_0) > a)] \\
+        & \leq \sum_{k=1}^{B} \Pr[\gfun(X_k) \leq a]
+    \end{align*}
+
+        By Lemma $\ref{lm:haj}$:
+
+    \begin{align*}
+        \Pr[T \leq B] & \leq \sum_{k=1}^{B} \rho^k e^{\lambda(a(l) - \gfun(X_0))} + \frac{1 - \rho^k}{1 - \rho} D e^{\lambda(a(l) - b(l))}\\
+        & = \rho \frac{1 - \rho^B}{1 - \rho} e^{\lambda a(l)}(e^{-\lambda\gfun(X_0)} - \frac{D}{1 - \rho} e^{-\lambda b(l)}) + e^{\lambda(a(l) - b(l))} \frac{B D}{1 - \rho}
+    \end{align*}
+
+    Because $\gfun(X_0) \ge b(l)$:
+
+    \begin{align*}
+        \Pr[T \leq B] & \leq \rho \frac{1 - \rho^B}{1 - \rho} e^{\lambda (a(l) - b(l))}(1 - \frac{D}{1 - \rho}) + e^{\lambda(a(l) - b(l))} \frac{B D}{1 - \rho}
+    \end{align*}
+    
+    Then because $\frac{D}{1 - \rho} \ge 1 $:
+    \begin{align*}
+        \Pr[T \leq B] & \leq e^{\lambda(a(l) - b(l))} \frac{B D}{1 - \rho}\\
+        & = e^{\lambda(a(l) - b(l))} \cdot B \cdot D \cdot p(l)
+    \end{align*}
+
+    Finally
+
+    $$\Pr[T \leq B] \leq e^{\lambda(a(l) - b(l))} \cdot B \cdot D \cdot p(l)$$
+
+\end{proof}
+\subsection{Theorem for sub-gaussian processes}
+\cm
+\subsection{Comparing requirements}
+\cm
+\subsection*{Оценки на матожидание}
 
 Для использования дрифт теорем, нам необходимо, чтобы выполнялись некоторые ограничения на последовательность случайных величин, например следующее:
 $$
@@ -59,7 +140,7 @@ E[e^{\gamma (X_{t + 1} - X_{t})}] \leq 1 - \frac{1}{p}\ .$$
 
 Чтобы сравнить строгость требований давайте проанализируем поведение $E[e^{\gamma X}]$ относительно $\gamma$. Так как распределения могут быть любыми, то стоит изучить их по отдельности, и для удобства начнем с непрерывных. 
 
-\subsection*{Непрерывный случай}
+\subsubsection*{Непрерывный случай}
 
 Вспомним определение матожидание от функции:
 
@@ -134,7 +215,7 @@ E[e^{\gamma X}] = E[1] + \int_0^\gamma \frac{\partial E[e^{\gamma X}]}{\partial 
     }
 \end{caseof}
 
-\subsection*{Дискретный случай}
+\subsubsection*{Дискретный случай}
 
 Аналогично вспомним определение матожидания:
 
@@ -169,12 +250,12 @@ E[e^{\gamma X}] \geq 1 + \gamma E[X] + \gamma^2 \frac{c}{2}
 
 Дальнейшие выводы ровно те же, что в непрерывном случае.
 
-\section*{Случай 0-ого матожидания}
+\subsection*{Случай 0-ого матожидания}
 \label{sec:zero}
 
 Здесь я буду рассматривать случай симметричных функций плотности вероятности, так как их матожидание точно 0. Далее я обобщу на более общий случай.
 
-\subsection*{Экспоненты от степеней икса}
+\subsubsection*{Экспоненты от степеней икса}
 
 Давайте рассмотрим функции вида
 
@@ -270,10 +351,17 @@ $$\exists K > 0 \ \forall p \geq 1: \left(E[X^p]\right)^{\frac{1}{p}} \leq K \sq
 
 Для $a \in (1, 2)$ очевидно, что асимптотика больше, чем у корня, так что сабгаусовость не наблюдается.
 
-\section*{Заключение}
+\subsection*{Заключение}
 
 В случае $\textbf{\text{нулевого}}$ матожидания гарантировать сабгаусовость всегда мы не можем, что было доказано примером серии четных функций $\expx{a}$.
 
 В случае $\textbf{\text{положительного}}$ матожидания оба критерия не выполнимы, а если оно $\textbf{\text{отрицательное}}$, то оба выполнятся.
 
+\section{Tail bounds}
+\cm
+\section{Time bounds for process with variable $\lambda$}
+\cm
+
+\section{Conclusion}
+\cm
 \end{document}
