@@ -358,9 +358,74 @@ $$\exists K > 0 \ \forall p \geq 1: \left(E[X^p]\right)^{\frac{1}{p}} \leq K \sq
 В случае $\textbf{\text{положительного}}$ матожидания оба критерия не выполнимы, а если оно $\textbf{\text{отрицательное}}$, то оба выполнятся.
 
 \section{Tail bounds}
+\subsection{Upper bounds}
 \cm
+\subsection{Lower bounds}
+Lets take a look on process $\{X_t\}$ and its derive derivative process $\{Y_t\}$, where $Y_t = \varepsilon t - X_t$ and it has negative drift.
+
+Then we want to bounds $\Pr[T_x > t_0]$, where $T_x$ - first time $X_t \geq b$. 
+
+\begin{align*}
+    \Pr[T_x > t_0] \leq \Pr[X_{t_0} < b] \leq \Pr[Y_{t_0} > \varepsilon t_0 - b]
+\end{align*}
+
+Then, because $\{Y_t\}$ - process with negative drift, we may use the corresponding theorem *label*:
+
+\begin{align*}
+    \Pr[Y_t > \varepsilon t_0 - b] \leq t_0 D p e^{-\gamma(\epsilon t_0 - b + a)}
+\end{align*}
+
+Lets rewrite some to $T_x$: 
+
+\begin{align*}
+    \Pr[T_x > t_0] \leq t_0 D p e^{-\gamma(\epsilon t_0 - b + a)}
+\end{align*}
+
+Replace $t_0$ with another expression:
+
+\begin{align*}
+    t_0 := \frac{\alpha (b - a)}{\varepsilon}
+\end{align*}
+
+And then:
+
+\begin{align*}
+    \Pr\left[T_x > \frac{\alpha (b - a)}{\varepsilon}\right] \leq \frac{\alpha (b - a)}{\varepsilon} D p e^{-\gamma(\alpha - 1)(b - a)}
+\end{align*}
+
 \section{Time bounds for process with variable $\lambda$}
 \cm
+\subsection{Case when $\lambda$ is random value}
+Lets calculate total progress $\triangle X$. It is summation of all progresses of each iterations $\triangle X_i$. Then we can define variable $T$ - number of iterations (or time) and also:
+\[
+    \triangle X = \sum_{i = 0}^{T} \triangle X_i
+\]
+
+Then drift of $\triangle X$ is drift of this Vald's equality: 
+
+\[
+    E[\triangle X] = E\left[\sum_{i = 1}^{T} \triangle X_i\right]      
+\]
+
+Lets denote that $E[\triangle X_i]$ is a constant or we can show lower and upper bounds. Then:
+\[
+    E[\triangle X] = E\left[\sum_{i = 1}^{T} \triangle X_i\right] \thickapprox E[T] E[\triangle X_i]      
+\]
+
+Our goal to estimate total progress ($\Lambda$) by total cost, which is total number of calculations (number of calculations on iteration $i$ equals $\lambda_i$). Because $\lambda$ is random variable, each $\lambda_i$ has same drift and then:
+\[
+    E\left[\Lambda\right] = E\left[\sum_{i = 1}^{T} \lambda_i\right] = E[T] E[\lambda]    
+\]
+
+And then: 
+\[
+        E[\Lambda] = \frac{E[\triangle X] E[\lambda]}{E[\triangle X_i]}
+\]
+
+Lets denote $\vartheta_\lambda = \frac{E[X_i]}{E[\lambda]}$ and simplify previous equation:
+\[
+        E[\Lambda] = \frac{E[\triangle X]}{\vartheta_\lambda}
+\]
 
 \section{Conclusion}
 \cm
