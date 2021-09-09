@@ -39,6 +39,7 @@
 \newcommand{\expxpoz}[1]{e^{-x^{#1}}}
 \newcommand{\infint}[1]{\int_{-\infty}^{+\infty} #1 \, dx}
 \newcommand{\infintpoz}[1]{\int_{0}^{+\infty} #1 \, dx}
+\newcommand{\der}[2]{\frac{\partial #1}{\partial #2}}
 \newcommand{\cm}{coming soon\dots}
 
 \newcommand{\underrel}[2]{\mathrel{\mathop{#2}\limits_{#1}}}
@@ -125,9 +126,6 @@ To prove this theorem we need to use following lemma
 \subsection{Theorem for sub-gaussian processes}
 \cm
 \subsection{Comparing requirements}
-\cm
-\subsection*{Оценки на матожидание}
-
 Для использования дрифт теорем, нам необходимо, чтобы выполнялись некоторые ограничения на последовательность случайных величин, например следующее:
 $$
 \exists \delta \geq 0,\ c \in \mathbb{R} \ \forall  t \geq 0 \ \forall \gamma \in [0, \delta] : $$$$
@@ -180,40 +178,40 @@ E[e^{\gamma X}] = \int_{-\infty}^{+\infty} f(x) e^{\gamma x} \,dx,
 \[
 E[e^{\gamma X}] = E[1] + \int_0^\gamma \frac{\partial E[e^{\gamma X}]}{\partial \gamma} \, d\gamma \geq 1 + \gamma E[X] + \gamma^2 \frac{c}{2}    
 \]
-Рассмотрим несколько случаев:
+% Рассмотрим несколько случаев:
 
-\begin{caseof}
-    \case{$E[X] > 0.$}{
+% \begin{caseof}
+%     \case{$E[X] > 0.$}{
 
-        В таком случае матожидание экспоненты не может быть ниже 1, а также в окрестности нуля растет быстрее чем любая $e^{\frac{\gamma^2 c }{2}}$, так как: 
+%         В таком случае матожидание экспоненты не может быть ниже 1, а также в окрестности нуля растет быстрее чем любая $e^{\frac{\gamma^2 c }{2}}$, так как: 
         
-        $$\frac{\partial e^{\frac{\gamma^2 c}{2}}}{\partial \gamma} = c\gamma e^{\frac{\gamma^2 c}{2}} = g(\gamma)$$
+%         $$\frac{\partial e^{\frac{\gamma^2 c}{2}}}{\partial \gamma} = c\gamma e^{\frac{\gamma^2 c}{2}} = g(\gamma)$$
 
-        Но $g(0) = 0$, тогда как $E[X] > 0$, следовательно, что в любой окрестности нуля:
+%         Но $g(0) = 0$, тогда как $E[X] > 0$, следовательно, что в любой окрестности нуля:
         
-        $$\forall c > 0 \, \exists \gamma_c > 0 \, \forall \gamma \in (0, \gamma_c) : e^{\frac{\gamma^2 c}{2}} < E[e^{\gamma X}]$$
+%         $$\forall c > 0 \, \exists \gamma_c > 0 \, \forall \gamma \in (0, \gamma_c) : e^{\frac{\gamma^2 c}{2}} < E[e^{\gamma X}]$$
 
-        Следовательно обе границы сверху не выполнимы.
-    }
-    \case{$E[X] < 0$.}{
+%         Следовательно обе границы сверху не выполнимы.
+%     }
+%     \case{$E[X] < 0$.}{
 
-        В этом случае, аналогично предыдущему случаю, в некоторой окрестности нуля основной вклад в производную вносит именно слагаемое равно матожиданию, так как:
+%         В этом случае, аналогично предыдущему случаю, в некоторой окрестности нуля основной вклад в производную вносит именно слагаемое равно матожиданию, так как:
 
-        $$\frac{\partial E[e^{\gamma x}]}{\partial \gamma} \Big|_{\gamma = 0} = E[X] < 0$$
+%         $$\frac{\partial E[e^{\gamma x}]}{\partial \gamma} \Big|_{\gamma = 0} = E[X] < 0$$
 
-        Но в таком случае выполняются оба ограничения! Так как:
+%         Но в таком случае выполняются оба ограничения! Так как:
 
-        $$\exists \gamma_0 > 0 : \forall \gamma \in (0, \gamma_0) : E[e^{\gamma X}] < 1$$
+%         $$\exists \gamma_0 > 0 : \forall \gamma \in (0, \gamma_0) : E[e^{\gamma X}] < 1$$
 
-        Так что доказательство того, что процесс является сабгауссовым, равносильно нахождению $p$ во втором органичении.
+%         Так что доказательство того, что процесс является сабгауссовым, равносильно нахождению $p$ во втором органичении.
 
 
-        }
-    \case{$E[X] = 0.$}{
+%         }
+%     \case{$E[X] = 0.$}{
 
-        Второе ограничение явно не выполянется, так как матожидание экпоненты положительное, то вот точно ли не выполняется ограничение 1 еще предстоит узнать. Этот вопрос будет рассмотрен в $\hyperref[sec:zero]{\text{соотвествующем параграфе}}$.
-    }
-\end{caseof}
+%         Второе ограничение явно не выполянется, так как матожидание экпоненты положительное, то вот точно ли не выполняется ограничение 1 еще предстоит узнать. Этот вопрос будет рассмотрен в $\hyperref[sec:zero]{\text{соотвествующем параграфе}}$.
+%     }
+% \end{caseof}
 
 \subsubsection*{Дискретный случай}
 
@@ -236,7 +234,7 @@ E[e^{\gamma X}] = E[1] + \int_0^\gamma \frac{\partial E[e^{\gamma X}]}{\partial 
 В таком случае, аналогично возьмем производную и рассмотрим пот отдельности слагаемые из множества P и остальные:
 
 \begin{align*}
-    \frac{\partial E[e^{\gamma X}]}{\partial \gamma} &= \sum_{i = 1}^{+\infty} \frac{\partial e^{\gamma x_i}}{\partial \gamma} Pr[x = x_i] = \sum_{i = 1}^{+\infty} x_i e^{\gamma x_i} Pr[x = x_i] \\
+    \der{E[e^{\gamma X}]}{\gamma} &= \sum_{i = 1}^{+\infty} \frac{\partial e^{\gamma x_i}}{\partial \gamma} Pr[x = x_i] = \sum_{i = 1}^{+\infty} x_i e^{\gamma x_i} Pr[x = x_i] \\
     &= \sum_{i \in P} x_i e^{\gamma x_i} Pr[x = x_i] + \sum_{i \in \mathbb{N}\setminus P} x_i e^{\gamma x_i} Pr[x = x_i] \\
     &\geq \sum_{i \in P} x_i (1 + {\gamma x_i}) Pr[x = x_i] + \sum_{i \in \mathbb{N}\setminus P} x_i Pr[x = x_i] \\
     &= E[X] + \gamma\sum_{i \in P} x_i^2 Pr[x = x_i]
@@ -248,14 +246,27 @@ E[e^{\gamma X}] = E[1] + \int_0^\gamma \frac{\partial E[e^{\gamma X}]}{\partial 
 E[e^{\gamma X}] \geq 1 + \gamma E[X] + \gamma^2 \frac{c}{2}  
 \]
 
-Дальнейшие выводы ровно те же, что в непрерывном случае.
+Так как формулы в обоих случаях получились одинаковые, то дальнейшие рассуждения будут верны для обоих случаев (иначе различия будут уточнены).
 
-\subsection*{Случай 0-ого матожидания}
+\subsubsection{Impracticability for positive drift}
+
+В таком случае матожидание экспоненты не может быть ниже 1, а также в окрестности нуля растет быстрее чем любая $e^{\frac{\gamma^2 c }{2}}$, так как: 
+        
+$$\frac{\partial e^{\frac{\gamma^2 c}{2}}}{\partial \gamma} = c\gamma e^{\frac{\gamma^2 c}{2}} = g(\gamma)$$
+
+Но $g(0) = 0$, тогда как $E[X] > 0$, следовательно, что в любой окрестности нуля:
+
+$$\forall c > 0 \, \exists \gamma_c > 0 \, \forall \gamma \in (0, \gamma_c) : e^{\frac{\gamma^2 c}{2}} < E[e^{\gamma X}]$$
+
+Следовательно обе границы сверху не выполнимы.
+
+\subsubsection{Zero drfit case}
 \label{sec:zero}
 
 Здесь я буду рассматривать случай симметричных функций плотности вероятности, так как их матожидание точно 0. Далее я обобщу на более общий случай.
 
-\subsubsection*{Экспоненты от степеней икса}
+\paragraph*{Экспоненты от степеней икса}
+
 
 Давайте рассмотрим функции вида
 
@@ -289,7 +300,7 @@ $ и
 
 $$f(x) = \frac{a}{2\Gamma(\frac{1}{a})} \expx{a}$$
 
-Давайте найдем в таком случае n-ый момент (матожидание от $X^a$): 
+Давайте найдем в таком случае n-ый момент (матожидание от $X^n$): 
 
 \begin{align*}
     E[X^n] = \infint{f(x) x^n} = \frac{\Gamma(\frac{n + 1}{a})}{2\Gamma(\frac{1}{a})} (1 + (-1)^n)
@@ -351,6 +362,21 @@ $$\exists K > 0 \ \forall p \geq 1: \left(E[X^p]\right)^{\frac{1}{p}} \leq K \sq
 
 Для $a \in (1, 2)$ очевидно, что асимптотика больше, чем у корня, так что сабгаусовость не наблюдается.
 
+\subsubsection{Processes with negative drift} 
+
+В этом случае, аналогично случаю положительного дрифта, в некоторой окрестности нуля основной вклад в производную вносит именно слагаемое равно матожиданию, так как:
+
+$$\frac{\partial E[e^{\gamma x}]}{\partial \gamma} \Big|_{\gamma = 0} = E[X] < 0$$
+
+Но в таком случае выполняются оба ограничения! Так как:
+
+$$\exists \gamma_0 > 0 : \forall \gamma \in (0, \gamma_0) : E[e^{\gamma X}] < 1$$
+
+Так что доказательство того, что процесс является сабгауссовым, равносильно нахождению $p$ во втором органичении.
+
+\textbf{*РАССУЖДЕНИЯ ПРО П И КАРТИНКИ*}
+
+
 \subsection*{Заключение}
 
 В случае $\textbf{\text{нулевого}}$ матожидания гарантировать сабгаусовость всегда мы не можем, что было доказано примером серии четных функций $\expx{a}$.
@@ -359,9 +385,45 @@ $$\exists K > 0 \ \forall p \geq 1: \left(E[X^p]\right)^{\frac{1}{p}} \leq K \sq
 
 \section{Tail bounds}
 \subsection{Upper bounds}
-\cm
+Lets take a look on process $\{X_t\}$ and its derivative process $\{Y_t\}$, where $Y_t = X_t - \varepsilon t$ and it has negative drift.
+
+Then we want to bounds $\Pr[T_x \leq t_0]$, where $T_x$ - first time $X_t \geq b$. 
+
+\begin{align*}
+    \Pr[T_x \leq t_0] \leq \Pr[X_{t_0} \geq b] \leq \Pr[Y_{t_0} \geq b - \varepsilon t_0]
+\end{align*}
+
+Then, because $\{Y_t\}$ - process with negative drift, we may use the corresponding theorem *label*:
+
+\begin{align*}
+    \Pr[Y_{t_0} \geq b - \varepsilon t_0] \leq t_0 D p e^{-\gamma(b - \varepsilon t_0 - a)}
+\end{align*}
+
+Lets rewrite some to $T_x$: 
+
+\begin{align*}
+    \Pr[T_x \leq t_0] \leq t_0 D p e^{-\gamma(b - \varepsilon t_0 - a)}
+\end{align*}
+
+Replace $t_0$ with another expression:
+
+\begin{align*}
+    t_0 := \frac{\kappa (b - a)}{\varepsilon}
+\end{align*}
+
+And then:
+
+\begin{align*}
+    \Pr\left[T_x \leq \frac{\kappa (b - a)}{\varepsilon}\right] \leq \frac{\kappa (b - a)}{\varepsilon} D p e^{-\gamma(1 - \kappa)(b - a)}
+\end{align*}
+
+For example use $\kappa = \frac{1}{2}$:
+
+\begin{align*}
+    \Pr\left[T_x > \frac{(b - a)}{2\varepsilon}\right] \leq \frac{(b - a)}{2\varepsilon} D p e^{-\gamma\frac{(b - a)}{2}}
+\end{align*}
 \subsection{Lower bounds}
-Lets take a look on process $\{X_t\}$ and its derive derivative process $\{Y_t\}$, where $Y_t = \varepsilon t - X_t$ and it has negative drift.
+Lets take a look on process $\{X_t\}$ and its derivative process $\{Y_t\}$, where $Y_t = \varepsilon t - X_t$ and it has negative drift.
 
 Then we want to bounds $\Pr[T_x > t_0]$, where $T_x$ - first time $X_t \geq b$. 
 
@@ -384,13 +446,19 @@ Lets rewrite some to $T_x$:
 Replace $t_0$ with another expression:
 
 \begin{align*}
-    t_0 := \frac{\alpha (b - a)}{\varepsilon}
+    t_0 := \frac{\kappa (b - a)}{\varepsilon}
 \end{align*}
 
 And then:
 
 \begin{align*}
-    \Pr\left[T_x > \frac{\alpha (b - a)}{\varepsilon}\right] \leq \frac{\alpha (b - a)}{\varepsilon} D p e^{-\gamma(\alpha - 1)(b - a)}
+    \Pr\left[T_x > \frac{\kappa (b - a)}{\varepsilon}\right] \leq \frac{\kappa (b - a)}{\varepsilon} D p e^{-\gamma(\kappa - 1)(b - a)}
+\end{align*}
+
+For example use $\kappa = \frac{3}{2}$:
+
+\begin{align*}
+    \Pr\left[T_x > \frac{3 (b - a)}{2\varepsilon}\right] \leq \frac{3(b - a)}{2\varepsilon} D p e^{-\gamma\frac{(b - a)}{2}}
 \end{align*}
 
 \section{Time bounds for process with variable $\lambda$}
