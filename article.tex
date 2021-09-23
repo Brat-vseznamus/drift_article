@@ -27,7 +27,7 @@
 
 \newcounter{casenum}
 \newenvironment{caseof}{\setcounter{casenum}{1}}{\vskip.5\baselineskip}
-\newcommand{\case}[2]{\vskip.5\baselineskip\par\noindent {\bfseries Случай \arabic{casenum}:} #1\\#2\addtocounter{casenum}{1}}
+\newcommand{\case}[2]{\vskip.5\baselineskip\par\noindent {\bfseries Case \arabic{casenum}:} #1\\#2\addtocounter{casenum}{1}}
 
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{corollary}{Corollary}[theorem]
@@ -59,179 +59,135 @@
 \cm
 \subsection{Negative drift}
 \begin{theorem}[Drift Theorem for Lower Bounds] \label{thm:neat}
-    Let $\{X_t\}_{t \ge 0}$ be a Markow process over a set of states $\mathbb{S}$, and $\mathbf{g} : \mathbb{S} \rightarrow \mathbb{R}$ a function that assigns to every state a non-negative real numbers. Pick two real numbers $a(l)$ and $b(l)$ which depend on a parameter $l \in \mathbb{R}^+$ such that $0 < a(l) < b(l)$ holds and let the random variable $T$ denote
-    the earliest point in time $t \ge 0$ where $\mathbf{g}(X_t) \leq a(l)$ holds.
+    Let $\{X_t\}_{t \ge 0}$ be a Markow process over a finite set of states $\mathbb{S}$, and $\mathbf{g} : \mathbb{S} \rightarrow \mathbb{R}$ a function that assigns to every state a non-negative real numbers. Pick two real numbers $a$ and $b$ such that $a < b$ and let the random variable $T$ denote
+    the earliest point in time $t \ge 0$ where $\mathbf{g}(X_t) \leq a$ holds.
     
-    If there are constants $\lambda > 0$ and $D \ge 1$ and a polynomial $p(l)$ taking only positive values, for which the following four conditions hold
-
+    If there are constants $\lambda > 0$ and $D \ge 1$ and a $p$ taking only positive values, for which the following four conditions hold
+    \renewcommand\labelenumi{(\theenumi)}
     \begin{enumerate}
-        \item $\gfun(X_0) \ge b(l)$
-        \item $\forall t \ge 0 : E[e^{-\lambda(\gfun(X_{t + 1} - \gfun(X_t)))} |\ X_t,\ \gfun(X_t) < b(l)] \leq 1 - \frac{1}{p(l)} = \rho$
-        \item $\forall t \ge 0 : E[e^{-\lambda(\gfun(X_{t + 1} - b(l)))} |\ X_t,\ \gfun(X_t) \ge b(l)] \leq D$
+        \item $\gfun(X_0) \ge b$,
+        \item $\forall t \ge 0 : E\left[e^{-\lambda(\gfun(X_{t + 1} - \gfun(X_t)))} |\ X_t,\ \gfun(X_t) < b\right] \leq 1 - \frac{1}{p} = \rho$,
+        \item $\forall t \ge 0 : E\left[e^{-\lambda(\gfun(X_{t + 1} - b))} |\ X_t,\ \gfun(X_t) \ge b\right] \leq D$,
     \end{enumerate}
-    then for all time bounds $B \ge 0$, the following upper bound on probability for random variable $T$:
+    then for all time bounds $B \ge 0$ the probability that $T$ exceeds $B$ is at most:
 
     \begin{equation}
-        \Pr[T \leq B] \leq e^{\lambda(a(l) - b(l))} \cdot B \cdot D \cdot p(l)
+        \Pr[T \leq B] \leq e^{\lambda(a - b)} \cdot B \cdot D \cdot p
     \end{equation}
 \end{theorem}
 
-To prove this theorem we need to use following lemma
+To prove this theorem we use the following lemma from \cite{Hajek 82}
 
-\begin{lemma}[Hajek lemma 2.8] \label{lm:haj}
-    If conditions 2 and 3 are met, then
+\begin{lemma}[Lemma 2.8 in \cite{Hajek 82}] \label{lm:haj}
+    If conditions 2 and 3 are met then for all $t \geq 0$:
 
-    $$\forall t \ge 0 :\Pr[\gfun(X_t) \leq a(l)] \leq \rho^te^{\lambda(a(l) - \gfun(X_0))} + \frac{1 - \rho^t}{1 - \rho} D e^{\lambda(a(l) - b(l))}$$
+    $$\Pr[\gfun(X_t) \leq a] \leq \rho^te^{\lambda(a - \gfun(X_0))} + \frac{1 - \rho^t}{1 - \rho} D e^{\lambda(a - b)}$$
     
 \end{lemma}
 
 \begin{proof}[Proof of Theorem \ref{thm:neat}]
     
-    First of all we need to describe fact that time $T$ is less or equals $B$. It means that at any time $t \leq B$  event $\gfun(X_t) \leq a$ could have happened for first time, then
+    If $T = B$, then we have $\gfun(X_k) \leq a$ and for all $t < B$ we have $\gfun(X_t) > a$. Hence, we compute
 
-    % \[
-    %     \Pr[T \leq B] = \sum_{k=1}^{B} \Pr[\gfun(X_k) \leq a \land \gfun(X_{k - 1}) > a \land ... \land \gfun(X_0) > a)] 
-    % \]
-    
     \begin{align*}
         \Pr[T \leq B] &= \sum_{k=1}^{B} \Pr[T = k] \\
         &= \sum_{k=1}^{B} \Pr[\gfun(X_k) \leq a \land \gfun(X_{k - 1}) > a \land ... \land \gfun(X_0) > a)] \\
-        & \leq \sum_{k=1}^{B} \Pr[\gfun(X_k) \leq a]
+        & \leq \sum_{k=1}^{B} \Pr[\gfun(X_k) \leq a].
     \end{align*}
 
-        By Lemma $\ref{lm:haj}$:
+    By Lemma $\ref{lm:haj}$
 
     \begin{align*}
-        \Pr[T \leq B] & \leq \sum_{k=1}^{B} \rho^k e^{\lambda(a(l) - \gfun(X_0))} + \frac{1 - \rho^k}{1 - \rho} D e^{\lambda(a(l) - b(l))}\\
-        & = \rho \frac{1 - \rho^B}{1 - \rho} e^{\lambda a(l)}(e^{-\lambda\gfun(X_0)} - \frac{D}{1 - \rho} e^{-\lambda b(l)}) + e^{\lambda(a(l) - b(l))} \frac{B D}{1 - \rho}
+        \Pr[T \leq B] & \leq \sum_{k=1}^{B} \left(\rho^k e^{\lambda(a - \gfun(X_0))} + \frac{1 - \rho^k}{1 - \rho} D e^{\lambda(a - b)}\right)\\
+        & = \rho \left(\frac{1 - \rho^B}{1 - \rho}\right) e^{\lambda a}\left(e^{-\lambda\gfun(X_0)} - \frac{D}{1 - \rho} e^{-\lambda b}\right) + e^{\lambda(a - b)} \frac{B D}{1 - \rho}.
     \end{align*}
 
-    Because $\gfun(X_0) \ge b(l)$:
+    Since $\gfun(X_0) \ge b$ we have
 
     \begin{align*}
-        \Pr[T \leq B] & \leq \rho \frac{1 - \rho^B}{1 - \rho} e^{\lambda (a(l) - b(l))}(1 - \frac{D}{1 - \rho}) + e^{\lambda(a(l) - b(l))} \frac{B D}{1 - \rho}
+        \Pr[T \leq B] & \leq \rho \frac{1 - \rho^B}{1 - \rho} e^{\lambda (a - b)}\left(1 - \frac{D}{1 - \rho}\right) + e^{\lambda(a - b)} \frac{B D}{1 - \rho}
     \end{align*}
     
-    Then because $\frac{D}{1 - \rho} \ge 1 $:
+    Since $\frac{D}{1 - \rho} \geq D \geq 1 $, we further compute
     \begin{align*}
-        \Pr[T \leq B] & \leq e^{\lambda(a(l) - b(l))} \frac{B D}{1 - \rho}\\
-        & = e^{\lambda(a(l) - b(l))} \cdot B \cdot D \cdot p(l)
+        \Pr[T \leq B] \leq e^{\lambda(a - b)} \frac{B D}{1 - \rho} = e^{\lambda(a - b)} \cdot B \cdot D \cdot p
     \end{align*}
-
-    Finally
-
-    $$\Pr[T \leq B] \leq e^{\lambda(a(l) - b(l))} \cdot B \cdot D \cdot p(l)$$
 
 \end{proof}
 \subsection{Theorem for sub-gaussian processes}
 \cm
 \subsection{Comparing requirements}
-Для использования дрифт теорем, нам необходимо, чтобы выполнялись некоторые ограничения на последовательность случайных величин, например следующее:
+To use some versions of drift theorems, we need some requirements on the sequence of random variables to be satisfied, such as the following:
 $$
-\exists \delta \geq 0,\ c \in \mathbb{R} \ \forall  t \geq 0 \ \forall \gamma \in [0, \delta] : $$$$
-E[e^{\gamma (X_{t + 1} - X_{t})}] \leq e^{\frac{c \gamma^2}{2}},$$
+\exists \delta \geq 0,\ c \in \mathbb{R} \ \forall  t \geq 0 \ \forall \gamma \in [0, \delta]: $$$$
+E\left[e^{\gamma (X_{t + 1} - X_{t})}\right] \leq e^{\frac{c \gamma^2}{2}},$$
 
-или
+оr
 
-$$\exists \delta \geq 0,\ p \geq 1 \ \forall t \geq 0 : $$$$
-E[e^{\gamma (X_{t + 1} - X_{t})}] \leq 1 - \frac{1}{p}\ .$$
+$$\exists \delta \geq 0,\ p \geq 1 \ \forall t \geq 0: $$$$
+E\left[e^{\gamma (X_{t + 1} - X_{t})}\right] \leq 1 - \frac{1}{p}\ .$$
 
-Чтобы сравнить строгость требований давайте проанализируем поведение $E[e^{\gamma X}]$ относительно $\gamma$. Так как распределения могут быть любыми, то стоит изучить их по отдельности, и для удобства начнем с непрерывных. 
 
-\subsubsection*{Непрерывный случай}
+To compare rigors of requirements we need to explore behavior $E[e^{\gamma X}]$ regarding to $\gamma$. Of course this behavior depends on distribution type, hence consider common facts.   
 
-Вспомним определение матожидание от функции:
+\subsubsection*{Continuos distribution}
 
+Consider the definition of expectation of a function:
 \[
 E[e^{\gamma X}] = \int_{-\infty}^{+\infty} f(x) e^{\gamma x} \,dx,    
 \]
 
-где $f(x)$ - плотность распределения.
+where $f(x)$ is a distribution density function.
 
 \hfill
 
-Рассмотрим первую производную по $\gamma$:
+Let's take the first derivative $\gamma$:
 
 \begin{align*}
 \frac{\partial E[e^{\gamma X}]}{\partial \gamma} &= \frac{\partial}{\partial \gamma} \int_{-\infty}^{+\infty} f(x) e^{\gamma x} \, dx = \int_{-\infty}^{+\infty} f(x) \frac{\partial e^{\gamma x}}{\partial \gamma} \, dx = \int_{-\infty}^{+\infty} x f(x) e^{\gamma x} \, dx = \\
-&= \int_{-\infty}^{0} x f(x) e^{\gamma x} \, dx + \int_{0}^{+\infty} x f(x) e^{\gamma x} \, dx
+&= \int_{-\infty}^{0} x f(x) e^{\gamma x} \, dx + \int_{0}^{+\infty} x f(x) e^{\gamma x} \, dx.
 \end{align*}
 
-Заметим, что $\forall x \leq 0 : e^{\gamma x} \leq 1$, а для $\forall x \geq 0 : e^{\gamma x} \geq 1 + \gamma x$. В таком случае получается, (так как $\forall x : f(x) \geq 0$): 
+Note that $\forall x \leq 0 : e^{\gamma x} \leq 1$ and $\forall x \geq 0 : e^{\gamma x} \geq 1 + \gamma x$. Hence because $\forall x : f(x) \geq 0$ 
 
 \begin{align*}
     \int_{0}^{+\infty} x f(x) e^{\gamma x} \, dx &\geq \int_{0}^{+\infty} x f(x) (1 + \gamma x)\, dx    \\
-    \int_{-\infty}^{0} x f(x) e^{\gamma x} \, dx &\geq \int_{-\infty}^{0} x f(x)\, dx    
+    \int_{-\infty}^{0} x f(x) e^{\gamma x} \, dx &\geq \int_{-\infty}^{0} x f(x)\, dx.    
 \end{align*}
 
-В таком случае:
+And then
 
 \begin{align*}
 \frac{\partial E[e^{\gamma X}]}{\partial \gamma} &\geq  \int_{0}^{+\infty} x f(x) (1 + \gamma x)\, dx + \int_{-\infty}^{0} x f(x)\, dx  \\
-&= E[X] + \gamma \int_{0}^{+\infty} x^2 f(x) \, dx
+&= E[X] + \gamma \int_{0}^{+\infty} x^2 f(x) \, dx.
 \end{align*}
 
-Назовём $\int_{0}^{+\infty} x^2 f(x) \, dx = c \geq 0$
-
-Тогда если мы проинтегрируем обратно, то получим ограничение на матожидание снизу:
+Denote $\int_{0}^{+\infty} x^2 f(x) \, dx = c \geq 0$ and then if we reintegrate back, we get a restriction on the expectation from below:
 
 \[
-E[e^{\gamma X}] = E[1] + \int_0^\gamma \frac{\partial E[e^{\gamma X}]}{\partial \gamma} \, d\gamma \geq 1 + \gamma E[X] + \gamma^2 \frac{c}{2}    
+E[e^{\gamma X}] = E[1] + \int_0^\gamma \frac{\partial E[e^{\gamma X}]}{\partial \gamma} \, d\gamma \geq 1 + \gamma E[X] + \gamma^2 \frac{c}{2}.    
 \]
-% Рассмотрим несколько случаев:
 
-% \begin{caseof}
-%     \case{$E[X] > 0.$}{
+\subsubsection*{Discrete distribution}
 
-%         В таком случае матожидание экспоненты не может быть ниже 1, а также в окрестности нуля растет быстрее чем любая $e^{\frac{\gamma^2 c }{2}}$, так как: 
-        
-%         $$\frac{\partial e^{\frac{\gamma^2 c}{2}}}{\partial \gamma} = c\gamma e^{\frac{\gamma^2 c}{2}} = g(\gamma)$$
-
-%         Но $g(0) = 0$, тогда как $E[X] > 0$, следовательно, что в любой окрестности нуля:
-        
-%         $$\forall c > 0 \, \exists \gamma_c > 0 \, \forall \gamma \in (0, \gamma_c) : e^{\frac{\gamma^2 c}{2}} < E[e^{\gamma X}]$$
-
-%         Следовательно обе границы сверху не выполнимы.
-%     }
-%     \case{$E[X] < 0$.}{
-
-%         В этом случае, аналогично предыдущему случаю, в некоторой окрестности нуля основной вклад в производную вносит именно слагаемое равно матожиданию, так как:
-
-%         $$\frac{\partial E[e^{\gamma x}]}{\partial \gamma} \Big|_{\gamma = 0} = E[X] < 0$$
-
-%         Но в таком случае выполняются оба ограничения! Так как:
-
-%         $$\exists \gamma_0 > 0 : \forall \gamma \in (0, \gamma_0) : E[e^{\gamma X}] < 1$$
-
-%         Так что доказательство того, что процесс является сабгауссовым, равносильно нахождению $p$ во втором органичении.
-
-
-%         }
-%     \case{$E[X] = 0.$}{
-
-%         Второе ограничение явно не выполянется, так как матожидание экпоненты положительное, то вот точно ли не выполняется ограничение 1 еще предстоит узнать. Этот вопрос будет рассмотрен в $\hyperref[sec:zero]{\text{соотвествующем параграфе}}$.
-%     }
-% \end{caseof}
-
-\subsubsection*{Дискретный случай}
-
-Аналогично вспомним определение матожидания:
+In the same way consider expectation of function by definition:
 
 \begin{align*}
-    E[e^{\gamma X}] = \sum_{i = 1}^{+\infty} e^{\gamma x_i} Pr[x = x_i],
+    E[e^{\gamma X}] = \sum_{i = 1}^{+\infty} e^{\gamma x_i} \Pr[x = x_i],
 \end{align*}
 
-где $Pr$ - функция вероятности.
+where $\Pr$ is a probability function.
 
-\hfill
+% \hfill
 
-Аналогично рассмотрим множество $P = \{i \in \mathbb{N}: x_i \geq 0\}$. Тогда можно переписать: 
+Denote set $P = \{i \in \mathbb{N}: x_i \geq 0\}$. Hence 
 
 \begin{align*}
     E[e^{\gamma X}] = \sum_{i = 1}^{+\infty} e^{\gamma x_i} Pr[x = x_i] = \sum_{i \in P} e^{\gamma x_i} Pr[x = x_i] + \sum_{i \in \mathbb{N}\setminus P} e^{\gamma x_i} Pr[x = x_i],
 \end{align*}
 
-В таком случае, аналогично возьмем производную и рассмотрим пот отдельности слагаемые из множества P и остальные:
+After taking the first derivative we may split terms from $P$ set with other: 
+% В таком случае, аналогично возьмем производную и рассмотрим пот отдельности слагаемые из множества P и остальные:
 
 \begin{align*}
     \der{E[e^{\gamma X}]}{\gamma} &= \sum_{i = 1}^{+\infty} \frac{\partial e^{\gamma x_i}}{\partial \gamma} Pr[x = x_i] = \sum_{i = 1}^{+\infty} x_i e^{\gamma x_i} Pr[x = x_i] \\
@@ -240,82 +196,81 @@ E[e^{\gamma X}] = E[1] + \int_0^\gamma \frac{\partial E[e^{\gamma X}]}{\partial 
     &= E[X] + \gamma\sum_{i \in P} x_i^2 Pr[x = x_i]
 \end{align*}
 
-Также обозначим, $c = \sum_{i \in P} x_i^2 Pr[x = x_i] \geq 0$ и тогда ровно также: 
+Again denote $c = \sum_{i \in P} x_i^2 Pr[x = x_i] \geq 0$ and obtain a result similar to the previous paragraph 
 
 \[
 E[e^{\gamma X}] \geq 1 + \gamma E[X] + \gamma^2 \frac{c}{2}  
 \]
 
-Так как формулы в обоих случаях получились одинаковые, то дальнейшие рассуждения будут верны для обоих случаев (иначе различия будут уточнены).
+Because formulas for both cases are same all further conclusions will be same too.
 
 \subsubsection{Impracticability for positive drift}
 
-В таком случае матожидание экспоненты не может быть ниже 1, а также в окрестности нуля растет быстрее чем любая $e^{\frac{\gamma^2 c }{2}}$, так как: 
+In this case, the expectation of the exponent cannot be lower than 1, and also in the vicinity of zero it grows faster than any$e^{\frac{\gamma^2 c}{2}}$, because
         
-$$\frac{\partial e^{\frac{\gamma^2 c}{2}}}{\partial \gamma} = c\gamma e^{\frac{\gamma^2 c}{2}} = g(\gamma)$$
+$$\frac{\partial e^{\frac{\gamma^2 c}{2}}}{\partial \gamma} = c\gamma e^{\frac{\gamma^2 c}{2}} = g(\gamma),$$
 
-Но $g(0) = 0$, тогда как $E[X] > 0$, следовательно, что в любой окрестности нуля:
+But $g(0) = 0$, while $E[X] > 0$, therefore, that in any vicinity of zero
 
-$$\forall c > 0 \, \exists \gamma_c > 0 \, \forall \gamma \in (0, \gamma_c) : e^{\frac{\gamma^2 c}{2}} < E[e^{\gamma X}]$$
+$$\forall c > 0 \, \exists \gamma_c > 0 \, \forall \gamma \in (0, \gamma_c) : e^{\frac{\gamma^2 c}{2}} < E[e^{\gamma X}],$$
 
-Следовательно обе границы сверху не выполнимы.
+Hence both of requirements are not feasible.
 
 \subsubsection{Zero drfit case}
 \label{sec:zero}
 
-Здесь я буду рассматривать случай симметричных функций плотности вероятности, так как их матожидание точно 0. Далее я обобщу на более общий случай.
+In this section we will consider some specific family of continuos distributions with symmetric distribution density functions, because their expectation equals 0.
 
-\paragraph*{Экспоненты от степеней икса}
+\paragraph*{Exponent of polynomial}
 
+Consider function
 
-Давайте рассмотрим функции вида
+$$f(x) = c \expx{a},\ a > 0.$$
 
-$$f(x) = c \expx{a},\ a > 0$$
-
-Определим $c$
+Compute $c$
 
 \begin{align*}
     \infint{f(x)} &= \infint{c\expx{a}} = 1
 \end{align*}
 
 \begin{align*}
-    \infint{\expx{a}} = 2\infintpoz{\expxpoz{a}}
+    \infint{\expx{a}} = 2\infintpoz{\expxpoz{a}}.
 \end{align*}
 
-Сделаем замену
+Let's make a replacement
 
 \begin{align*}
     u &= x^a \\
-    du &= dx\,(a x^{a - 1}) = dx\,(a u^{1 - \frac{1}{a}})
+    du &= dx\,(a x^{a - 1}) = dx\,(a u^{1 - \frac{1}{a}}),
 \end{align*}
 
-В таком случае
+then
 
 \begin{align*}
-    2\infintpoz{\expxpoz{a}} = \frac{2}{a} \infintpoz{e^{-u}u^{\frac{1}{a} - 1}} = \frac{2\Gamma(\frac{1}{a})}{a}
+    2\infintpoz{\expxpoz{a}} = \frac{2}{a} \infintpoz{e^{-u}u^{\frac{1}{a} - 1}} = \frac{2\Gamma(\frac{1}{a})}{a}.
 \end{align*}
 
-Откуда делаем вывод, что $c = \frac{a}{2\Gamma(\frac{1}{a})}
-$ и 
+We conclude that $c = \frac{a}{2\Gamma(\frac{1}{a})}
+$ and 
 
-$$f(x) = \frac{a}{2\Gamma(\frac{1}{a})} \expx{a}$$
+$$f(x) = \frac{a}{2\Gamma(\frac{1}{a})} \expx{a}.$$
 
-Давайте найдем в таком случае n-ый момент (матожидание от $X^n$): 
+Let's find n-th momentum of $X$ (expectation от $X^n$): 
 
 \begin{align*}
     E[X^n] = \infint{f(x) x^n} = \frac{\Gamma(\frac{n + 1}{a})}{2\Gamma(\frac{1}{a})} (1 + (-1)^n)
 \end{align*}
 
-Теперь мы можем рассмотреть матожидание от $e^{\gamma X}$ в качестве ряда.
+Then we can consider $e^{\gamma X}$ as a infinite series
 
 \begin{align*}
     E[e^{\gamma X}] = E\left[\sum_{n = 0}^{+\infty}\frac{(\gamma X)^n}{n!}\right] &= \sum_{n = 0}^{+\infty}\gamma^n\frac{E[X^n]}{n!} = \sum_{n = 0}^{+\infty}\gamma^{2n}\frac{E[X^{2n}]}{2n!} =\\
     &= \sum_{n = 0}^{+\infty}\frac{(\gamma^2)^{n}}{n!}\left(\frac{E[X^{2n}]n!}{2n!}\right) = \sum_{n = 0}^{+\infty}\frac{(\gamma^2)^{n}}{n!} a_n
 \end{align*}
 
-Третье равенство выполняется, так как все моменты нечётной степени равны нулю в силу симметричности функции.
+Third equality is satisfied because all odd momentums are 0 due to the symmetry of the function.
 
-Рассмотрим предел последовательности $\{\sqrt[n]{a_n}\}$:
+Consider sequence $\{\sqrt[n]{a_n}\}$:
 
 \begin{align*}
     A = \lim_{n \to +\infty} \sqrt[n]{a_n} &= \lim_{n \to +\infty} \sqrt[n]{\frac{n! E[X^{2n}]}{2n!}} = 
@@ -326,174 +281,163 @@ $$f(x) = \frac{a}{2\Gamma(\frac{1}{a})} \expx{a}$$
                 \left(\frac{2n}{e}\right)^{2n} \sqrt{4\pi n}\ \Gamma\left(\frac{1}{a}\right)}
         }\\
     &= \lim_{n \to +\infty} \frac{n}{e} \frac{e^2}{4n^2} \sqrt[n]{\Gamma\left(\frac{2n + 1}{a}\right)} \simeq \lim_{n \to +\infty}  \frac{e}{4n} \sqrt[n]{\left(\frac{2n + 1}{ae}\right)^{\frac{2n + 1}{a}}} \\
-    &= \lim_{n \to +\infty} \frac{e}{4n} \left(\frac{2n}{ae}\right)^{\frac{2}{a}} = \left(\frac{e^{1 - \frac{2}{a}}}{2^{2 - \frac{2}{a}} a^\frac{2}{a}}\right) \lim_{n \to +\infty} n^{\frac{2}{a} - 1}
+    &= \lim_{n \to +\infty} \frac{e}{4n} \left(\frac{2n}{ae}\right)^{\frac{2}{a}} = \left(\frac{e^{1 - \frac{2}{a}}}{2^{2 - \frac{2}{a}} a^\frac{2}{a}}\right) \lim_{n \to +\infty} n^{\frac{2}{a} - 1}.
 \end{align*}
 
-Рассмотрим случаи относительно значения а: 
+Let's take a look on convergence of previous sequence regarding to values of the $a$: 
 \begin{caseof}
     \case{$a \geq 2$}{
-
-        Тогда $A$ существует и конечно, что значит, что существует такое $C > 0$, такое что 
-        $$\forall n \geq 0 : a_n \leq C^n$$
-
-        Следовательно 
-
-        $$E[e^{\gamma X}] \leq e^{\gamma^2 C}$$
+        
+        Then $A$ exist, which means existing $C > 0$ with property 
+        $\forall n \geq 0 : a_n \leq C^n$.
+        Hence $E[e^{\gamma X}] \leq e^{\gamma^2 C}.$
     }
     \case{$a < 2$}{
 
-        Предела не существует, а значит ничего утверждать про сабгаусовость нельзя. 
+        Sequence doesn't converge, so you can't say anything about sub-gausality. 
     }
 \end{caseof}
 
-Если провести аналогичные вычисления но для последовательности $\{\sqrt[n]{\frac{a_n}{n!}}\}$, то порогом, относительно $a$, будет 1, где только при $a \geq 1$, ряд сходится.
+We can compute same limit for $\{\sqrt[n]{\frac{a_n}{n!}}\}$ and threshold regarding to $a$ is 1, where only for $a \geq 1$ series converge.
 
-В таком случае остается выяснить, что происходит на отрезке $a \in (1, 2)$. Для этого воспользуемся другим определением сабгаусовости:
+In this case we need to explore behavior of series when $a \in (1, 2)$. By another definition of sub-gaussian process
 
-$$\exists K > 0 \ \forall p \geq 1: \left(E[X^p]\right)^{\frac{1}{p}} \leq K \sqrt{p}$$ 
+$$\exists K > 0 \ \forall p \geq 1: \left(E[X^p]\right)^{\frac{1}{p}} \leq K \sqrt{p}.$$ 
 
 
-Вычислим (будем считать $p\ \vdots\ 2$): 
+Let's compute (assume $p\ \vdots\ 2$)
 
 \begin{align*}
     E[X^p] &= \frac{\Gamma\left(\frac{p + 1}{a}\right)}{\Gamma\left(\frac{1}{a}\right)} \\
-    E[X^p]^\frac{1}{p} &\underrel{p \to +\infty} {=} \left(\frac{p}{e a}\right)^{\frac{p}{a} \frac{1}{p}} = \mathcal{O}(p^\frac{1}{a})
+    E[X^p]^\frac{1}{p} &\underrel{p \to +\infty} {=} \left(\frac{p}{e a}\right)^{\frac{p}{a} \frac{1}{p}} = \mathcal{O}(p^\frac{1}{a}).
 \end{align*}
 
-Для $a \in (1, 2)$ очевидно, что асимптотика больше, чем у корня, так что сабгаусовость не наблюдается.
+For $a \in (1, 2)$ obviously that asymptotics is greater that square root. Hence sub-gausality is not feasible.
 
 \subsubsection{Processes with negative drift} 
 
-В этом случае, аналогично случаю положительного дрифта, в некоторой окрестности нуля основной вклад в производную вносит именно слагаемое равно матожиданию, так как:
+In this case, similarly to the positive drift case, it is the summand equal to the expectation that makes the main contribution to the derivative in some neighborhood of zero, since
 
-$$\frac{\partial E[e^{\gamma x}]}{\partial \gamma} \Big|_{\gamma = 0} = E[X] < 0$$
+$$\frac{\partial E[e^{\gamma x}]}{\partial \gamma} \Big|_{\gamma = 0} = E[X] < 0.$$
 
-Но в таком случае выполняются оба ограничения! Так как:
+So both requirements are feasible since:
 
-$$\exists \gamma_0 > 0 : \forall \gamma \in (0, \gamma_0) : E[e^{\gamma X}] < 1$$
+$$\exists \gamma_0 > 0 : \forall \gamma \in (0, \gamma_0) : E[e^{\gamma X}] < 1.$$
 
-Так что доказательство того, что процесс является сабгауссовым, равносильно нахождению $p$ во втором органичении.
+So proving that the process is sub-gaussian is tantamount to finding $p$ in the second requirements.
 
 \textbf{*РАССУЖДЕНИЯ ПРО П И КАРТИНКИ*}
 
 
 \subsection*{Заключение}
 
-В случае $\textbf{\text{нулевого}}$ матожидания гарантировать сабгаусовость всегда мы не можем, что было доказано примером серии четных функций $\expx{a}$.
+In the case of $\textbf{\text{zero}}$ expectation we cannot always guarantee subgausality, which has been proved by the example of series of even functions $\expx{a}$.
 
-В случае $\textbf{\text{положительного}}$ матожидания оба критерия не выполнимы, а если оно $\textbf{\text{отрицательное}}$, то оба выполнятся.
+In the case of $\textbf{\text{positive}}$ expectation both criteria are not feasible, and if it is $\textbf{\text{negative}}$, then both are feasible.
 
 \section{Tail bounds}
 \subsection{Upper bounds}
-Lets take a look on process $\{X_t\}$ and its derivative process $\{Y_t\}$, where $Y_t = X_t - \varepsilon t$ and it has negative drift.
+Consider a process $\{X_t\}_{t \in \mathbb{N}}$ with positive drift (i.e. $E[X_{t + 1} - X_t |\ X_t = s] \geq 0$ for all $s$) and another process $\{Y_t\}_{t \in \mathbb{N}}$ such that $Y_t = X_t - \varepsilon t$ and it has negative drift (i.e. $E[Y_{t + 1} - Y_t |\ Y_t = s] \leq 0$ for all $s$).
 
-Then we want to bounds $\Pr[T_x \leq t_0]$, where $T_x$ - first time $X_t \geq b$. 
-
-\begin{align*}
-    \Pr[T_x \leq t_0] \leq \Pr[X_{t_0} \geq b] \leq \Pr[Y_{t_0} \geq b - \varepsilon t_0]
-\end{align*}
-
-Then, because $\{Y_t\}$ - process with negative drift, we may use the corresponding theorem *label*:
+Our aim is to bound the probability $\Pr[T_X \leq t_0]$, where $T_X$ is the first time when $X_t \geq b$ for some $b > X_0$ and for $t_0$. We first note that 
 
 \begin{align*}
-    \Pr[Y_{t_0} \geq b - \varepsilon t_0] \leq t_0 D p e^{-\gamma(b - \varepsilon t_0 - a)}
+    \Pr[T_X \leq t_0] \leq \Pr[X_{t_0} \geq b] \leq \Pr[Y_{t_0} \geq b - \varepsilon t_0].
 \end{align*}
 
-Lets rewrite some to $T_x$: 
+Since $\{Y_t\}_{t \in \mathbb{N}}$ is a process with negative drift, it is a subject to theorem \cite{}:
 
 \begin{align*}
-    \Pr[T_x \leq t_0] \leq t_0 D p e^{-\gamma(b - \varepsilon t_0 - a)}
+    \Pr[Y_{t_0} \geq b - \varepsilon t_0] \leq t_0 D p e^{-\gamma(b - \varepsilon t_0 - a)},
 \end{align*}
 
-Replace $t_0$ with another expression:
+which also implies
 
 \begin{align*}
-    t_0 := \frac{\kappa (b - a)}{\varepsilon}
+    \Pr[T_X \leq t_0] \leq t_0 D p e^{-\gamma(b - \varepsilon t_0 - a)}.
 \end{align*}
 
-And then:
+Let $t_0 := \frac{\kappa (b - a)}{\varepsilon}$. 
+\begin{align*}
+    \Pr\left[T_X \leq \frac{\kappa (b - a)}{\varepsilon}\right] \leq \frac{\kappa (b - a)}{\varepsilon} D p e^{-\gamma(1 - \kappa)(b - a)}.
+\end{align*}
+
+For example we can use $\kappa = \frac{1}{2}$ and obtain
 
 \begin{align*}
-    \Pr\left[T_x \leq \frac{\kappa (b - a)}{\varepsilon}\right] \leq \frac{\kappa (b - a)}{\varepsilon} D p e^{-\gamma(1 - \kappa)(b - a)}
+    \Pr\left[T_X > \frac{(b - a)}{2\varepsilon}\right] \leq \frac{(b - a)}{2\varepsilon} D p e^{-\gamma\frac{(b - a)}{2}}
 \end{align*}
 
-For example use $\kappa = \frac{1}{2}$:
-
-\begin{align*}
-    \Pr\left[T_x > \frac{(b - a)}{2\varepsilon}\right] \leq \frac{(b - a)}{2\varepsilon} D p e^{-\gamma\frac{(b - a)}{2}}
-\end{align*}
 \subsection{Lower bounds}
-Lets take a look on process $\{X_t\}$ and its derivative process $\{Y_t\}$, where $Y_t = \varepsilon t - X_t$ and it has negative drift.
+% Lets take a look on process $\{X_t\}$ and its derivative process $\{Y_t\}$, where $Y_t = \varepsilon t - X_t$ and it has negative drift.
 
-Then we want to bounds $\Pr[T_x > t_0]$, where $T_x$ - first time $X_t \geq b$. 
+% Then we want to bounds $\Pr[T_X > t_0]$, where $T_X$ - first time $X_t \geq b$. 
 
-\begin{align*}
-    \Pr[T_x > t_0] \leq \Pr[X_{t_0} < b] \leq \Pr[Y_{t_0} > \varepsilon t_0 - b]
-\end{align*}
+% \begin{align*}
+%     \Pr[T_X > t_0] \leq \Pr[X_{t_0} < b] \leq \Pr[Y_{t_0} > \varepsilon t_0 - b]
+% \end{align*}
 
-Then, because $\{Y_t\}$ - process with negative drift, we may use the corresponding theorem *label*:
+% Then, because $\{Y_t\}$ - process with negative drift, we may use the corresponding theorem *label*:
 
-\begin{align*}
-    \Pr[Y_t > \varepsilon t_0 - b] \leq t_0 D p e^{-\gamma(\epsilon t_0 - b + a)}
-\end{align*}
+% \begin{align*}
+%     \Pr[Y_t > \varepsilon t_0 - b] \leq t_0 D p e^{-\gamma(\epsilon t_0 - b + a)}
+% \end{align*}
 
-Lets rewrite some to $T_x$: 
+% Lets rewrite some to $T_X$: 
 
-\begin{align*}
-    \Pr[T_x > t_0] \leq t_0 D p e^{-\gamma(\epsilon t_0 - b + a)}
-\end{align*}
+% \begin{align*}
+%     \Pr[T_X > t_0] \leq t_0 D p e^{-\gamma(\epsilon t_0 - b + a)}
+% \end{align*}
 
-Replace $t_0$ with another expression:
+% Replace $t_0$ with another expression:
 
-\begin{align*}
-    t_0 := \frac{\kappa (b - a)}{\varepsilon}
-\end{align*}
+% \begin{align*}
+%     t_0 := \frac{\kappa (b - a)}{\varepsilon}
+% \end{align*}
 
-And then:
+% And then:
 
-\begin{align*}
-    \Pr\left[T_x > \frac{\kappa (b - a)}{\varepsilon}\right] \leq \frac{\kappa (b - a)}{\varepsilon} D p e^{-\gamma(\kappa - 1)(b - a)}
-\end{align*}
+% \begin{align*}
+%     \Pr\left[T_X > \frac{\kappa (b - a)}{\varepsilon}\right] \leq \frac{\kappa (b - a)}{\varepsilon} D p e^{-\gamma(\kappa - 1)(b - a)}
+% \end{align*}
 
-For example use $\kappa = \frac{3}{2}$:
+% For example use $\kappa = \frac{3}{2}$:
 
-\begin{align*}
-    \Pr\left[T_x > \frac{3 (b - a)}{2\varepsilon}\right] \leq \frac{3(b - a)}{2\varepsilon} D p e^{-\gamma\frac{(b - a)}{2}}
-\end{align*}
+% \begin{align*}
+%     \Pr\left[T_X > \frac{3 (b - a)}{2\varepsilon}\right] \leq \frac{3(b - a)}{2\varepsilon} D p e^{-\gamma\frac{(b - a)}{2}}
+% \end{align*}
+
+% ПОВТОРИТЬ ЕЩЕ РАЗ ПРЕДЫДУЩИЙ ПАРАГРАФ
 
 \section{Time bounds for process with variable $\lambda$}
 \cm
 \subsection{Case when $\lambda$ is random value}
-Lets calculate total progress $\triangle X$. It is summation of all progresses of each iterations $\triangle X_i$. Then we can define variable $T$ - number of iterations (or time) and also:
+Consider the total progress $\Delta X$ by $T$ iterations. It is a sum of all progresses $\Delta X_i$ made in previous iteration
 \[
-    \triangle X = \sum_{i = 0}^{T} \triangle X_i
+    \Delta X = \sum_{i = 0}^{T} \Delta X_i
 \]
 
-Then drift of $\triangle X$ is drift of this Vald's equality: 
+By Vald's equality we have 
 
 \[
-    E[\triangle X] = E\left[\sum_{i = 1}^{T} \triangle X_i\right]      
+    E[\Delta X] = E\left[\sum_{i = 1}^{T} \Delta X_i\right].      
 \]
 
-Lets denote that $E[\triangle X_i]$ is a constant or we can show lower and upper bounds. Then:
+If ew assume that $E[\Delta X_i]$ is a constant or at least we can give relatively sharp bounds lower and upper bounds on it, then
 \[
-    E[\triangle X] = E\left[\sum_{i = 1}^{T} \triangle X_i\right] \thickapprox E[T] E[\triangle X_i]      
+    E[\Delta X] = E\left[\sum_{i = 1}^{T} \Delta X_i\right] \thickapprox E[T] E[\Delta X_i].      
 \]
 
-Our goal to estimate total progress ($\Lambda$) by total cost, which is total number of calculations (number of calculations on iteration $i$ equals $\lambda_i$). Because $\lambda$ is random variable, each $\lambda_i$ has same drift and then:
+Let $\Lambda$ be the total cost, which is total number of fitness evaluations (the fitness evaluations in iteration $i$ equals $\lambda_i$). Since $\lambda$ is random variable, each $\lambda_i$ has the same expectation. Therefore, we have
 \[
-    E\left[\Lambda\right] = E\left[\sum_{i = 1}^{T} \lambda_i\right] = E[T] E[\lambda]    
+    E\left[\Lambda\right] = E\left[\sum_{i = 1}^{T} \lambda_i\right] = E[T] E[\lambda] \thickapprox \frac{E[\Delta X] E[\lambda]}{E[\Delta X_i]}
 \]
 
-And then: 
+If we denote $\vartheta_\lambda = \frac{E[\Delta X_i]}{E[\lambda]}$, which is the expected progress per fitness evaluation, then the previous equation is simplified to
 \[
-        E[\Lambda] = \frac{E[\triangle X] E[\lambda]}{E[\triangle X_i]}
+        E[\Lambda] \thickapprox \frac{E[\Delta X]}{\vartheta_\lambda}
 \]
-
-Lets denote $\vartheta_\lambda = \frac{E[X_i]}{E[\lambda]}$ and simplify previous equation:
-\[
-        E[\Lambda] = \frac{E[\triangle X]}{\vartheta_\lambda}
-\]
+% $\vartheta_{\lambda, X_t} = \nu (\lambda, X_t)$
 
 \section{Conclusion}
 \cm
