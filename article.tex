@@ -20,7 +20,8 @@
 
 \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
 \definecolor{darkGreen}{RGB}{31, 140, 47}
-\definecolor{darkBlue}{RGB}{31, 53, 125}   
+\definecolor{darkBlue}{RGB}{31, 53, 125}
+\definecolor{brightYellow}{RGB}{245, 210, 10}   
 \title{\text{Additive drift with tail bounds}}
 
 % \date{04-08-2021}
@@ -122,52 +123,60 @@ To prove this theorem we use the following lemma from \cite{Hajek 82}
 \cm
 \subsection{Comparing requirements}
 \label{sec:compare}
-To use some versions of drift theorems, we need some requirements on the sequence of random variables to be satisfied, such as the following:
+% To use some versions of drift theorems, we need some requirements on the sequence of random variables to be satisfied, such as the following:
+% $$
+%     \exists \delta \geq 0,\ c \in \mathbb{R} \ \forall  t \geq 0 \ \forall \gamma \in [0, \delta] $$$$
+%     E\left[e^{\gamma (X_{t + 1} - X_{t})}\right] \leq e^{\frac{c \gamma^2}{2}},$$
+
+% оr
+
+% $$\exists \delta \geq 0,\ p \geq 1 \ \forall t \geq 0 $$$$
+%     E\left[e^{\gamma (X_{t + 1} - X_{t})}\right] \leq 1 - \frac{1}{p}\ .$$
+
+The theorem for sub-Gaussian processes is applicable, when there exist $\delta \geq 0$ and $c \in \mathbb{R}$ such that for all $t \geq 0$ and for all $\gamma \in [0, \delta]$ we have
+
+$$  E\left[e^{\gamma (X_{t + 1} - X_{t})}\right] \leq e^{\frac{c \gamma^2}{2}}.$$
+
+At the same time the negative drift theorem is applicable when there exist $\delta \geq 0$ and $p \geq 1$ such that for all $t \geq 0$ we have
+
 $$
-    \exists \delta \geq 0,\ c \in \mathbb{R} \ \forall  t \geq 0 \ \forall \gamma \in [0, \delta] $$$$
-    E\left[e^{\gamma (X_{t + 1} - X_{t})}\right] \leq e^{\frac{c \gamma^2}{2}},$$
-
-оr
-
-$$\exists \delta \geq 0,\ p \geq 1 \ \forall t \geq 0 $$$$
     E\left[e^{\gamma (X_{t + 1} - X_{t})}\right] \leq 1 - \frac{1}{p}\ .$$
 
-
-To compare rigors of requirements we need to explore behavior $E[e^{\gamma X}]$ regarding to $\gamma$. Of course this behavior depends on distribution type, hence consider common facts.
+To compare rigors of requirements we need to explore behavior $E[e^{\gamma X}]$ depending to $\gamma$. This behavior depends on the distribution $X$, hence we consider the two cases for continuos and for discrete distributions.
 
 \subsubsection*{Continuos distribution}
 
-Consider the definition of expectation of a function
+By the definition of expectation of a function we have
 \[
     E[e^{\gamma X}] = \int_{-\infty}^{+\infty} f(x) e^{\gamma x} \,dx,
 \]
 
-where $f(x)$ is a probability density function.
+where $f(x)$ is a probability density function for $X$.
 
 \hfill
 
-Let's take the first derivative $\gamma$
+We compute the first derivative of this expectation over $\gamma$
 
 \begin{align*}
     \frac{\partial E[e^{\gamma X}]}{\partial \gamma} & = \frac{\partial}{\partial \gamma} \int_{-\infty}^{+\infty} f(x) e^{\gamma x} \, dx = \int_{-\infty}^{+\infty} f(x) \frac{\partial e^{\gamma x}}{\partial \gamma} \, dx = \int_{-\infty}^{+\infty} x f(x) e^{\gamma x} \, dx = \\
-                                                     & = \int_{-\infty}^{0} x f(x) e^{\gamma x} \, dx + \int_{0}^{+\infty} x f(x) e^{\gamma x} \, dx.
+    & = \int_{-\infty}^{0} x f(x) e^{\gamma x} \, dx + \int_{0}^{+\infty} x f(x) e^{\gamma x} \, dx.
 \end{align*}
 
-Note that $\forall x \leq 0 e^{\gamma x} \leq 1$ and $\forall x \geq 0 e^{\gamma x} \geq 1 + \gamma x$. Hence because $\forall x f(x) \geq 0$
+Note that for all $x \leq 0$ we have $e^{\gamma x} \leq 1$ and for all $x \geq 0$ we have $e^{\gamma x} \geq 1 + \gamma x$. Hence since $f(x) \geq 0$ for all x, we have
 
 \begin{align*}
     \int_{0}^{+\infty} x f(x) e^{\gamma x} \, dx & \geq \int_{0}^{+\infty} x f(x) (1 + \gamma x)\, dx \\
     \int_{-\infty}^{0} x f(x) e^{\gamma x} \, dx & \geq \int_{-\infty}^{0} x f(x)\, dx.
 \end{align*}
 
-And then
+Therefore,
 
 \begin{align*}
     \frac{\partial E[e^{\gamma X}]}{\partial \gamma} & \geq  \int_{0}^{+\infty} x f(x) (1 + \gamma x)\, dx + \int_{-\infty}^{0} x f(x)\, dx \\
-                                                     & = E[X] + \gamma \int_{0}^{+\infty} x^2 f(x) \, dx.
+    & = E[X] + \gamma \int_{0}^{+\infty} x^2 f(x) \, dx.
 \end{align*}
 
-Denote $\int_{0}^{+\infty} x^2 f(x) \, dx = c \geq 0$ and then if we reintegrate back, we get a restriction on the expectation from below
+We denote $c = \int_{0}^{+\infty} x^2 f(x) \, dx \geq 0$.If we integrate the inequality above, we obtain a lower bound on the expectation.
 
 \[
     E[e^{\gamma X}] = E[1] + \int_0^\gamma \frac{\partial E[e^{\gamma X}]}{\partial \gamma} \, d\gamma \geq 1 + \gamma E[X] + \gamma^2 \frac{c}{2}.
@@ -175,13 +184,11 @@ Denote $\int_{0}^{+\infty} x^2 f(x) \, dx = c \geq 0$ and then if we reintegrate
 
 \subsubsection*{Discrete distribution}
 
-In the same way consider expectation of function by definition
+In the same way we consider the expectation of function by definition
 
 \begin{align*}
-    E[e^{\gamma X}] = \sum_{i = 1}^{+\infty} e^{\gamma x_i} \Pr[x = x_i],
+    E[e^{\gamma X}] = \sum_{i = 1}^{+\infty} e^{\gamma x_i} \Pr[x = x_i].
 \end{align*}
-
-where $\Pr$ is a probability function.
 
 % \hfill
 
@@ -191,7 +198,7 @@ Denote set $P = \{i \in \mathbb{N}: x_i \geq 0\}$. Hence
     E[e^{\gamma X}] = \sum_{i = 1}^{+\infty} e^{\gamma x_i} Pr[x = x_i] = \sum_{i \in P} e^{\gamma x_i} Pr[x = x_i] + \sum_{i \in \mathbb{N}\setminus P} e^{\gamma x_i} Pr[x = x_i],
 \end{align*}
 
-After taking the first derivative we may split terms from $P$ set with other terms
+When we take the first derivative we can split to two group, first of which are terms with indices from $P$ set and others
 % В таком случае, аналогично возьмем производную и рассмотрим пот отдельности слагаемые из множества P и остальные:
 
 \begin{align*}
@@ -201,32 +208,36 @@ After taking the first derivative we may split terms from $P$ set with other ter
                                   & = E[X] + \gamma\sum_{i \in P} x_i^2 Pr[x = x_i]
 \end{align*}
 
-Again denote $c = \sum_{i \in P} x_i^2 Pr[x = x_i] \geq 0$ and obtain a result similar to the previous paragraph
+We denote $c = \sum_{i \in P} x_i^2 Pr[x = x_i] \geq 0$ and obtain a bound similar to the one for conditions random variables.
 
 \[
     E[e^{\gamma X}] \geq 1 + \gamma E[X] + \gamma^2 \frac{c}{2}
 \]
 
-Because formulas for both cases are same all further conclusions will be same too.
+Since the bounds for both cases are the same, we do not distinguish cases for continuos and discrete v.v.
 
 \subsubsection{Impracticability for positive drift}
 
-In this case, the expectation of the exponent cannot be lower than 1, and also in the vicinity of zero it grows faster than any$e^{\frac{\gamma^2 c}{2}}$, because
+In this case, the expectation of the exponent cannot be lower than 1, and also in the some neighborhood of zero it grows faster than any $e^{\frac{\gamma^2 c}{2}}$, since
 
 $$\frac{\partial e^{\frac{\gamma^2 c}{2}}}{\partial \gamma} = c\gamma e^{\frac{\gamma^2 c}{2}} = g(\gamma),$$
 
-But $g(0) = 0$, while $E[X] > 0$, therefore, that in any vicinity of zero
+Note that $g(0) = 0$, while $E[X] > 0$, therefore, that in any neighborhood of zero we have
 
 $$\forall c > 0 \, \exists \gamma_c > 0 \, \forall \gamma \in (0, \gamma_c) e^{\frac{\gamma^2 c}{2}} < E[e^{\gamma X}],$$
 
-Hence both of requirements are not feasible.
+Hence, both requirements are not feasible.
 
 \subsubsection{Zero drfit case}
 \label{sec:zero}
 
-In this section we will consider some specific family of continuos distributions with symmetric probability density functions, because their expectation equals 0.
+In this section we consider some specific family of continuos distributions with symmetric probability density functions, because their expectation equals 0.
 
 \paragraph*{Exponent of polynomial}
+
+\hfill
+
+\hfill
 
 Consider function
 
@@ -235,21 +246,21 @@ $$f(x) = c \expx{a},\ a > 0.$$
 Compute $c$
 
 \begin{align*}
-    \infint{f(x)} & = \infint{c\expx{a}} = 1
+    \infint{f(x)} & = \infint{c\expx{a}} = 1,
 \end{align*}
 
 \begin{align*}
     \infint{\expx{a}} = 2\infintpoz{\expxpoz{a}}.
 \end{align*}
 
-Let's make a replacement
+We denote
 
 \begin{align*}
     u  & = x^a                                              \\
     du & = dx\,(a x^{a - 1}) = dx\,(a u^{1 - \frac{1}{a}}),
 \end{align*}
 
-then
+Then, we have
 
 \begin{align*}
     2\infintpoz{\expxpoz{a}} = \frac{2}{a} \infintpoz{e^{-u}u^{\frac{1}{a} - 1}} = \frac{2\Gamma(\frac{1}{a})}{a}.
@@ -260,7 +271,7 @@ $ and
 
 $$f(x) = \frac{a}{2\Gamma(\frac{1}{a})} \expx{a}.$$
 
-Let's find n-th momentum of $X$ (expectation от $X^n$)
+We compute the n-th momentum of $X$ (expectation от $X^n$) as follows
 
 \begin{align*}
     E[X^n] = \infint{f(x) x^n} = \frac{\Gamma(\frac{n + 1}{a})}{2\Gamma(\frac{1}{a})} (1 + (-1)^n)
@@ -270,12 +281,14 @@ Then we can consider $e^{\gamma X}$ as a infinite series
 
 \begin{align*}
     E[e^{\gamma X}] = E\left[\sum_{n = 0}^{+\infty}\frac{(\gamma X)^n}{n!}\right] & = \sum_{n = 0}^{+\infty}\gamma^n\frac{E[X^n]}{n!} = \sum_{n = 0}^{+\infty}\gamma^{2n}\frac{E[X^{2n}]}{2n!} =                                \\
-    & = \sum_{n = 0}^{+\infty}\frac{(\gamma^2)^{n}}{n!}\left(\frac{E[X^{2n}]n!}{2n!}\right) = \sum_{n = 0}^{+\infty}\frac{(\gamma^2)^{n}}{n!} a_n
+    & = \sum_{n = 0}^{+\infty}\frac{(\gamma^2)^{n}}{n!}\left(\frac{E[X^{2n}]n!}{2n!}\right) = \sum_{n = 0}^{+\infty}\frac{(\gamma^2)^{n}}{n!} a_n,
 \end{align*}
+
+Where by $a_n$ we denote $\frac{E[X^{2n}]n!}{2n!}$ for all $n \in \mathbb{N}$.
 
 Third equality is satisfied because all odd momentums are 0 due to the symmetry of the function.
 
-Consider sequence $\{\sqrt[n]{a_n}\}$
+Consider the limit of the sequence $\{\sqrt[n]{a_n}\}_{n \in \mathbb{N}}$
 
 \begin{align*}
     A = \lim_{n \to +\infty} \sqrt[n]{a_n} & = \lim_{n \to +\infty} \sqrt[n]{\frac{n! E[X^{2n}]}{2n!}} =
@@ -289,11 +302,11 @@ Consider sequence $\{\sqrt[n]{a_n}\}$
     & = \lim_{n \to +\infty} \frac{e}{4n} \left(\frac{2n}{ae}\right)^{\frac{2}{a}} = \left(\frac{e^{1 - \frac{2}{a}}}{2^{2 - \frac{2}{a}} a^\frac{2}{a}}\right) \lim_{n \to +\infty} n^{\frac{2}{a} - 1}.
 \end{align*}
 
-Let's take a look on convergence of previous sequence regarding to values of the $a$
+We now consider two cases depending on the value of $a$
 \begin{caseof}
     \case{$a \geq 2$}{
 
-        Then $A$ exist, which means existing $C > 0$ with property
+        Then $A$ exist, which implies that there exist $C > 0$ such that
         $\forall n \geq 0 a_n \leq C^n$.
         Hence $E[e^{\gamma X}] \leq e^{\gamma^2 C}.$
     }
@@ -303,7 +316,9 @@ Let's take a look on convergence of previous sequence regarding to values of the
     }
 \end{caseof}
 
-We can compute same limit for $\{\sqrt[n]{\frac{a_n}{n!}}\}$ and threshold regarding to $a$ is 1, where only for $a \geq 1$ series converge.
+\hfill
+
+We can compute same limit for $\{\sqrt[n]{\frac{a_n}{n!}}\}_{n \in \mathbb{N}}$ and threshold regarding to $a$ is 1, where only for $a \geq 1$ series converge.
 
 In this case we need to explore behavior of series when $a \in (1, 2)$. By another definition of sub-gaussian process
 
@@ -317,7 +332,7 @@ Let's compute (assume $p\ \vdots\ 2$)
     E[X^p]^\frac{1}{p} & \underrel{p \to +\infty} {=} \left(\frac{p}{e a}\right)^{\frac{p}{a} \frac{1}{p}} = \mathcal{O}(p^\frac{1}{a}).
 \end{align*}
 
-For $a \in (1, 2)$ obviously that asymptotics is greater that square root. Hence sub-gausality is not feasible.
+For $a \in (1, 2)$ the asymptotic is greater that square root. Hence sub-gausality is not feasible.
 
 \subsubsection{Processes with negative drift}
 
@@ -325,13 +340,17 @@ In this case, similarly to the positive drift case, it is the summand equal to t
 
 $$\frac{\partial E[e^{\gamma x}]}{\partial \gamma} \Big|_{\gamma = 0} = E[X] < 0.$$
 
-So both requirements are feasible since
+Hence both requirements are feasible, since we have
 
 $$\exists \gamma_0 > 0 \forall \gamma \in (0, \gamma_0) E[e^{\gamma X}] < 1.$$
 
-So proving that the process is sub-gaussian is tantamount to finding $p$ in the second requirements.
+Consequently proving that the process is sub-gaussian is tantamount to finding $p$ in the second requirements.
+
+\hfill
 
 \textbf{*РАССУЖДЕНИЯ ПРО П И КАРТИНКИ*}
+
+\hfill
 
 Define function for distribution $X$ $B_X$ such that
 \begin{align*}
@@ -409,69 +428,28 @@ Example for distribution $X$ with probability density function $f(x) = 0.65 e^{-
     % \label{fig:negativeDriftPic2}
 \end{figure}
 
-If $E[X] > 0$ then in some neighborhood around $\gamma = 0$ would be greater than any $e^{\frac{c \gamma^2}{2}}$, because if
+If $E[X] > 0$ then in some neighborhood around $\gamma = 0$ would be greater than any $e^{\frac{c \gamma^2}{2}}$. To proof it, consider function $G_c(\gamma) = e^{\frac{c \gamma^2}{2}}$, then
 
-$$\frac{\partial e^{\frac{\gamma^2 c}{2}}}{\partial \gamma} = c\gamma e^{\frac{\gamma^2 c}{2}} = g(\gamma),$$
+$$\frac{\partial G_c(\gamma)}{\partial \gamma} = c\gamma\ G_c(\gamma) = g(\gamma),$$
 
 $g(0) = 0 < E[X]$ and $Ee_X(0) = B_X(0) = 1$. Hence both of requirements are not feasible.
 
-Example 
+Example for $X \sim \mathcal{N}(1, 1)$:
 
 \begin{figure}[h!]
     \begin{center}
      \begin{tikzpicture}[scale = 0.8]
         \begin{axis}[
+            legend style=
+            {nodes={scale=0.9, transform shape},
+            at={(1.33,1)},anchor=north east},
             axis lines = left,
             xlabel = \(\gamma\),
             ylabel = {\(f(\gamma)\)},
             xmin=0, xmax=0.4,
             ymin=0.95, ymax=1.5
         ]
-        % \addplot[color=darkGreen,
-        %     domain=0:0.9,
-        %     dashed,
-        %     line width=1pt
-        % ]{1 + (1) * x + (1.925) / 2 * x * x};
-        % \addlegendentry{\(B_X(\gamma)\)}
-        \addplot[color=green,
-            domain=0.04:0.3,
-            line width=0.8pt
-        ]{exp((50 * x^2) / 2)};
-
-        \addplot[color=red,
-            domain=0:0.6,
-            line width=0.8pt,
-            dashed
-        ]{exp((4 * x^2) / 2)};
-
-        \addplot[color=red,
-            domain=0:0.6,
-            line width=0.8pt,
-            dashed
-        ]{exp((10 * x^2) / 2)};
-
-        \addplot[color=green,
-            domain=0.1:0.6,
-            line width=0.8pt
-        ]{exp((20 * x^2) / 2)};
-
-        % \addplot[color=red,
-        %     domain=0:0.6,
-        %     line width=1.2pt
-        % ]{exp((15 * x^2) / 2)};
-
-        \addplot[color=red,
-            domain=0:0.6,
-            line width=0.8pt,
-            dashed
-        ]{exp((20 * x^2) / 2)};
-
-        \addplot[color=red,
-            domain=0:0.3,
-            line width=0.8pt,
-            dashed
-        ]{exp((50 * x^2) / 2)};
-
+        
         \addplot[color=darkBlue,
             domain=0:0.6,
             line width=1.2pt
@@ -479,22 +457,62 @@ Example
         
         \addlegendentry{\(Ee_X(\gamma)\)}
 
-        % \addplot[color=black,mark=*] coordinates {(0.3578, 0.9174)};
-        % \addplot[color=black,mark=*] coordinates {(0.15, 0.9631)};
-        \addplot[color=red,
+        \addplot[color=violet,
             domain=0:3,
             dashed
         ]{1};
+
+        \addlegendentry{\(G_0(\gamma)\)}
+
+        \addplot[color=purple,
+            domain=0:0.6,
+            line width=0.8pt,
+            dashed
+        ]{exp((4 * x^2) / 2)};
+
+        \addlegendentry{\(G_4(\gamma)\)}
+
+        \addplot[color=red,
+            domain=0:0.6,
+            line width=0.8pt,
+            dashed
+        ]{exp((10 * x^2) / 2)};
+
+        \addlegendentry{\(G_{10}(\gamma)\)}
+
+        \addplot[color=orange,
+            domain=0:0.6,
+            line width=0.8pt,
+            dashed
+        ]{exp((20 * x^2) / 2)};
+
+        \addlegendentry{\(G_{20}(\gamma)\)}
+
+        \addplot[color=brightYellow,
+            domain=0:0.3,
+            line width=0.8pt,
+            dashed
+        ]{exp((50 * x^2) / 2)};
+
+        \addlegendentry{\(G_{50}(\gamma)\)}
+
+        \addplot[color=darkBlue,
+            domain=0:0.6,
+            line width=1.2pt
+        ]{exp((x^2 + 2*x) / 2)};
+
+        \addplot[color=brightYellow,mark=*] coordinates {(0.0408, 1.0425)};
+        \addplot[color=orange,mark=*] coordinates {(0.1053, 1.1172)};
+        \addplot[color=red,mark=*] coordinates {(0.2222, 1.2801)};
+        
         \end{axis}
      \end{tikzpicture}
     \end{center}
-    % \caption{Plot of the function $Ee_X(\gamma)$ with its bound $B_X(\gamma)$, where $X$ has probability density function $f(x) = 0.65 e^{-0.65(x + 2)}$.}
-    % \label{fig:negativeDriftPic2}
 \end{figure}
 
-\subsection*{Заключение}
+\subsection*{Conclusions}
 
-In the case of $\textbf{\text{zero}}$ expectation we cannot always guarantee subgausality, which has been proved by the example of series of even functions $\expx{a}$.
+In the case of $\textbf{\text{zero}}$ expectation we cannot always guarantee sub-gausality, which has been proved by the example of series of even functions $\expx{a}$.
 
 In the case of $\textbf{\text{positive}}$ expectation both criteria are not feasible, and if it is $\textbf{\text{negative}}$, then both are feasible.
 
