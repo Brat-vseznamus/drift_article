@@ -564,13 +564,13 @@ Our aim is to bound the probability $\Pr[T_X > t_0]$, where $T_X$ is the first t
 Since $\{Y_t\}_{t \in \mathbb{N}}$ is a process with negative drift, it is a subject to Theorem \cite{}. Hence, we have
 
 \begin{align*}
-    \Pr[Y_t > \varepsilon t_0 - b] \leq t_0 D p e^{-\gamma(\epsilon t_0 - b + a)},
+    \Pr[Y_t > \varepsilon t_0 - b] \leq t_0 D p e^{-\gamma(\varepsilon t_0 - b + a)},
 \end{align*}
 
 which also implies
 
 \begin{align*}
-    \Pr[T_X > t_0] \leq t_0 D p e^{-\gamma(\epsilon t_0 - b + a)}.
+    \Pr[T_X > t_0] \leq t_0 D p e^{-\gamma(\varepsilon t_0 - b + a)}.
 \end{align*}
 
 Let $t_0 := \frac{\kappa (b - a)}{\varepsilon}$. Then we compute
