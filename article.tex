@@ -388,7 +388,7 @@ Since second derivative always great than zero, than first derivative is continu
 
 Then if $E[X] < 0$ $Ee(\gamma)$ would go down in some neighborhood. And if $E[X^2]_+ \neq 0$ it will have point with zero derivative, what fits the condition of the second requirement.
 
-\pagebreak
+\hfill
 
 Example for distribution $X$ with probability density function $f(x) = 0.65 e^{-0.65(x + 2)}$:
 
@@ -433,6 +433,8 @@ If $E[X] > 0$ then in some neighborhood around $\gamma = 0$ would be greater tha
 $$\frac{\partial G_c(\gamma)}{\partial \gamma} = c\gamma\ G_c(\gamma) = g(\gamma),$$
 
 $g(0) = 0 < E[X]$ and $Ee_X(0) = B_X(0) = 1$. Hence both of requirements are not feasible.
+
+\pagebreak
 
 Example for $X \sim \mathcal{N}(1, 1)$:
 
@@ -624,31 +626,31 @@ For example we can use $\kappa = \frac{3}{2}$ and obtain
 
 \section{Time bounds for process with variable $\lambda$}
 \cm
-\subsection{Case when $\lambda$ is random value}
-Consider the total progress $\Delta X$ by $T$ iterations. It is a sum of all progresses $\Delta X_i$ made in previous iteration
+\subsection{Case when $\lambda$ is a random variable}
+Consider the total progress $\Delta X$ made in $T$ iterations. It is a sum of all progresses $\Delta X_i$ made in each of $T$ iterations.
 \[
     \Delta X = \sum_{i = 0}^{T} \Delta X_i
 \]
 
-By Vald's equality we have
+By Wald's equality we have
 
 \[
     E[\Delta X] = E\left[\sum_{i = 1}^{T} \Delta X_i\right].
 \]
 
-If ew assume that $E[\Delta X_i]$ is a constant or at least we can give relatively sharp bounds lower and upper bounds on it, then
+If we assume that $E[\Delta X_i]$ is a constant or at least we can give relatively sharp lower and upper bounds on it, then
 \[
     E[\Delta X] = E\left[\sum_{i = 1}^{T} \Delta X_i\right] \thickapprox E[T] E[\Delta X_i].
 \]
 
-Let $\Lambda$ be the total cost, which is total number of fitness evaluations (the fitness evaluations in iteration $i$ equals $\lambda_i$). Since $\lambda$ is random variable, each $\lambda_i$ has the same expectation. Therefore, we have
+Let $\Lambda$ be the total cost, which is the total number of fitness evaluations (the fitness evaluations in iteration $i$ equals $\lambda_i$). Since $\lambda$ is a random variable, each $\lambda_i$ has the same expectation. Therefore, we have
 \[
     E\left[\Lambda\right] = E\left[\sum_{i = 1}^{T} \lambda_i\right] = E[T] E[\lambda] \thickapprox \frac{E[\Delta X] E[\lambda]}{E[\Delta X_i]}
 \]
 
 If we denote $\vartheta_\lambda = \frac{E[\Delta X_i]}{E[\lambda]}$, which is the expected progress per fitness evaluation, then the previous equation is simplified to
 \[
-    E[\Lambda] \thickapprox \frac{E[\Delta X]}{\vartheta_\lambda}
+    E[\Lambda] \thickapprox \frac{E[\Delta X]}{\vartheta_\lambda}.
 \]
 % $\vartheta_{\lambda, X_t} = \nu (\lambda, X_t)$
 
