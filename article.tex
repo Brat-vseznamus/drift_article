@@ -49,6 +49,10 @@
 
 \newcommand{\underrel}[2]{\mathrel{\mathop{#2}\limits_{#1}}}
 
+\newcommand{\todo}[1]{\textbf{\textcolor{red}{TODO: #1}}}
+
+\DeclareMathOperator{\Geom}{Geom}
+
 \author{Vihnin F.
     \and Antipov D.
     \and Sinyachenko N.}
@@ -58,10 +62,34 @@
 \maketitle
 
 \section{Introduction}
-\cm
+
+Drift analysis is a powerful toolbox for the analysis of random processes. Taking the roots from Hajek's negative drift~\cite{Hajek82} drift analysis was significantly developed by the evolutionary computation community starting with a seminal work by He and Yao~\cite{HeY04} introducing the additive drift theorem. Since then many modifications have been produced such as multiplicative drift~\cite{DoerrJW12} and variable drift~\cite{Johannsen10,RoweS12}. The most recent overview of the family of drift theorems can be found in~\cite{Lengler17}.
+
+All drift theorems consider a random process $\{X_t\}_{t \in \N}$, which starts with some $X_0 = a$ and aims to reach some value $b$. \todo{Adapt all theorems to this notation or change the notation, if it is easier.} Without loss of generality, we assume that $a < b$\footnote{Some of the drift theorems are formulated for a process which starts at a greater value $b$ and aims to reach a smaller value $a$. However, such results can be inverted by considering a process $Y_t = -X_t$.}. The \emph{hitting time} $T$ for such process is the minimum $t$ such that $X_t \ge b$. The main idea of drift analysis is to transform the available information about the process such as the expected step size $E[X_{t + 1} - X_t \mid X_t = s]$ (which is called the \emph{drift} of the process) into information about the hitting time. E.g., the additive drift theorem claims that if the expected step size is bounded from below by some $\delta > 0$, then the expected hitting time is at most the distance $(b - a)$ which the process has to cover divided by $\delta$ (with some additional conditions such as $X_t$ cannot jump over its goal, that is, $X_t \le b$ for all $t \in \N$). More formally, we have
+\begin{align*}
+    E[T] \le \frac{b - a}{\delta}.
+\end{align*}
+The additive drift theorem also works into an opposite direction. That is, if the drift is bounded from above by some $\delta > 0$, then we have
+\begin{align*}
+    E[T] \ge \frac{b - a}{\delta}.
+\end{align*}
+
+Several other drift theorems are capable to give us more information about the hitting time. In particular, the multiplicative drift theorem~\cite{DoerrJW12} gives an exponentially small bound on the probability of the hitting time to exceed its expectation. The reason why the additive drift theorem does not give us anything similar bounds on the concentration of the hitting time is that it uses only a small piece of information about the considered process, which is, the expected progress. To be able to obtain some tail bounds on the hitting time we should also have some bounds on the concentration of the steps of the process. For example, consider two processes $\{X_t\}_{t \in \N}$ and $\{Y_t\}_{t \in \N}$ which start with $X_0 = Y_0 = 0$ and the hitting time for these processes is when they reach $100$. Let $\{X_t\}_{t \in \N}$ be a deterministic process such that for all $t \in N$ we have $X_{t + 1} = X_t + 1$. Let $\{Y_t\}_{t \in \N}$ be a process such that with probability $\frac{1}{100}$ we have $Y_{t + 1} = Y_t + 100$ and we have $Y_{t + 1} = Y_t$ otherwise. Both processes reach zero in the same expected time, namely in 100 steps. However, the hitting time of $\{X_t\}_{t \in \N}$ is determined and has zero variation, while the hitting time of $\{Y_t\}_{t \in \N}$ follows a geometric distribution $\Geom(\frac{1}{100})$ and its standard deviation is $10\sqrt{99} \approx 99$.
+
+In practice we often meet something in the middle between these two processes, namely processes with non-deterministic, but well-concentrated steps. Intuition suggests that for such processes the variation of the hitting time should not be large too. We are aware of two approaches for the analysis of such processes, which are, the analysis via sub-Gaussian processes shown in~\cite{Kotzing16} and the analysis via the original negative drift theorem shown in~\cite{AntipovDK19}. We discuss both approaches and show that they have the same nature, however, they have different conditions when they are applicable. \todo{State exact results here: the differences and similarities.}
 
 \section{Existing tools}
-\cm
+
+The two mentioned approaches for deriving the tail bounds on the hitting time for the processes under additive drift use the same trick. To estimate the upper bound they take an original process $\{X_t\}_{t \in \N}$ (which is a subject to the additive drift) and consider a process $Y_t = X_t - \eps t$. If we take $\eps$ which is not less than the drift of $X_t$ then $Y_t$ has a non-positive drift, since
+\begin{align*}
+    E[Y_{t + 1} - Y_t \mid Y_t = s] = E[X_{t + 1} - X_t \mid X_t = s + \eps t] - \eps \le 0.  
+\end{align*}
+Then in both approaches we aim to bound the probability that $Y_t$ exceeds some value $c \in (a, b)$ in less than $\tau$ steps with some value $\rho$. With such bound, then for all $\tau$ such that $b - \eps \tau \ge c$ we have
+\begin{align*}
+    \Pr[X_\tau \ge b] = \Pr[Y_\tau \ge b - \eps \tau] \le \Pr[Y_\tau \ge c].
+\end{align*} 
+Our goal is to have this bound for $\tau$ which is slightly less than the expected hitting time, which by the additive drift theorem is at most $\frac{b - a}{\eps}$. Hence we aim at proving an upper bound on $\Pr[Y_\tau \ge c]$ for all $c$ such that $\frac{b - c}{\eps}$ is as close to ${b - a}{\eps}$ as possible.
+
 \subsection{Negative drift}
 \begin{theorem}[Drift Theorem for Lower Bounds] \label{thm:neat}
     Let $\{X_t\}_{t \ge 0}$ be a Markow process over a finite set of states $\mathbb{S}$, and $\mathbf{g} : \mathbb{S} \rightarrow \mathbb{R}$ a function that assigns to every state a non-negative real numbers. Pick two real numbers $a$ and $b$ such that $a < b$ and let the random variable $T$ denote
@@ -656,4 +684,9 @@ If we denote $\vartheta_\lambda = \frac{E[\Delta X_i]}{E[\lambda]}$, which is th
 
 \section{Conclusion}
 \cm
+
+
+\bibliographystyle{alpha}
+\bibliography{bibliography}
+
 \end{document}
