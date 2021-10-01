@@ -80,23 +80,46 @@ The additive drift theorem also works into an opposite direction. That is, if th
     E[T] \ge \frac{b - a}{\delta}.
 \end{align*}
 
-Several other drift theorems are capable to give us more information about the hitting time. In particular, the multiplicative drift theorem~\cite{DoerrJW12} gives an exponentially small bound on the probability of the hitting time to exceed its expectation. The reason why the additive drift theorem does not give us anything similar bounds on the concentration of the hitting time is that it uses only a small piece of information about the considered process, which is, the expected progress. To be able to obtain some tail bounds on the hitting time we should also have some bounds on the concentration of the steps of the process. For example, consider two processes $\{X_t\}_{t \in \N}$ and $\{Y_t\}_{t \in \N}$ which start with $X_0 = Y_0 = 0$ and the hitting time for these processes is when they reach $100$. Let $\{X_t\}_{t \in \N}$ be a deterministic process such that for all $t \in N$ we have $X_{t + 1} = X_t + 1$. Let $\{Y_t\}_{t \in \N}$ be a process such that with probability $\frac{1}{100}$ we have $Y_{t + 1} = Y_t + 100$ and we have $Y_{t + 1} = Y_t$ otherwise. Both processes reach zero in the same expected time, namely in 100 steps. However, the hitting time of $\{X_t\}_{t \in \N}$ is determined and has zero variation, while the hitting time of $\{Y_t\}_{t \in \N}$ follows a geometric distribution $\Geom(\frac{1}{100})$ and its standard deviation is $10\sqrt{99} \approx 99$.
+Several other drift theorems are capable to give us more information about the hitting time. In particular, the multiplicative drift theorem~\cite{DoerrJW12} gives an exponentially small bound on the probability of the hitting time to exceed its expectation. The reason why the additive drift theorem does not give us any similar bounds on the concentration of the hitting time is that it uses only a small piece of information about the considered process, which is, the expected progress. To be able to obtain some tail bounds on the hitting time we should also have some bounds on the concentration of the steps of the process. For example, consider two processes $\{X_t\}_{t \in \N}$ and $\{Y_t\}_{t \in \N}$ which start with $X_0 = Y_0 = 0$ and the hitting time for these processes is when they reach $100$. Let $\{X_t\}_{t \in \N}$ be a deterministic process such that for all $t \in N$ we have $X_{t + 1} = X_t + 1$. Let $\{Y_t\}_{t \in \N}$ be a process such that with probability $\frac{1}{100}$ we have $Y_{t + 1} = Y_t + 100$ and we have $Y_{t + 1} = Y_t$ otherwise. Both processes have the same drift equal to one, and both processes reach $100$ in the same expected time, namely in 100 steps. However, the hitting time of $\{X_t\}_{t \in \N}$ is determined and has zero variation, while the hitting time of $\{Y_t\}_{t \in \N}$ follows a geometric distribution $\Geom(\frac{1}{100})$ and its standard deviation is $10\sqrt{99} \approx 99$.
 
-In practice we often meet something in the middle between these two processes, namely processes with non-deterministic, but well-concentrated steps. Intuition suggests that for such processes the variation of the hitting time should not be large too. We are aware of two approaches for the analysis of such processes, which are, the analysis via sub-Gaussian processes shown in~\cite{Kotzing16} and the analysis via the original negative drift theorem shown in~\cite{AntipovDK19}. We discuss both approaches and show that they have the same nature, however, they have different conditions when they are applicable. \todo{State exact results here: the differences and similarities.}
+In practice we often meet something in the middle between these two processes, namely processes with non-deterministic, but well-concentrated steps. Intuition suggests that for such processes the variation of the hitting time should not be large too. We are aware of two approaches for the analysis of such processes, which are, the analysis via sub-Gaussian processes shown in~\cite{Kotzing16} and the analysis via the negative drift theorem shown in~\cite{AntipovDK19}. We discuss both approaches and show that they have the same nature, however, they have different conditions when they are applicable. \todo{State exact results here: the differences and similarities.}
 
 \section{Existing tools}
 
-The two mentioned approaches for deriving the tail bounds on the hitting time for the processes under additive drift use the same trick. To estimate the upper bound they take an original process $\{X_t\}_{t \in \N}$ (which is a subject to the additive drift) and consider a process $Y_t = X_t - \eps t$. If we take $\eps$ which is not less than the drift of $X_t$ then $Y_t$ has a non-positive drift, since
+The two approaches for deriving the tail bounds on the hitting time for the processes under additive drift shown in~\cite{Kotzing16} and in~\cite{AntipovDK19} use the same trick. They decompose the random process $X_t$ into a sum of a deterministic process and a super- or sub-martingale. Namely, they consider
 \begin{align*}
-    E[Y_{t + 1} - Y_t \mid Y_t = s] = E[X_{t + 1} - X_t \mid X_t = s + \eps t] - \eps \le 0.  
+    X_t = Y_t + \eps t,
 \end{align*}
-Then in both approaches we aim to bound the probability that $Y_t$ exceeds some value $c \in (a, b)$ in less than $\tau$ steps with some value $\rho$. With such bound, then for all $\tau$ such that $b - \eps \tau \ge c$ we have
+where $\eps$ is a constant chosen in such a way that $Y_t$ is either za super- or sub-martingale.
+
+When we aim at showing the lower tail bound, that is, for some time bound $B$ we want to estimate $\Pr[T \le B]$, then we must
+\begin{enumerate}
+    \item know the \emph{upper} bound $\delta$ on the expected progress of $X_t$ and
+    \item choose $\eps$ which is at least $\delta$ so that $Y_t$ was a super-martingale.
+\end{enumerate}
+After that the main goal is to show that $Y_t$ does not exceed some value $c > 0$ in at least $B$ steps, since it would imply that $X_t$ does not exceed $\eps t + c$. Hence, if we consider only $B$ such that $(b - a) > \eps B + c$  then we have 
 \begin{align*}
-    \Pr[X_\tau \ge b] = \Pr[Y_\tau \ge b - \eps \tau] \le \Pr[Y_\tau \ge c].
-\end{align*} 
-Our goal is to have this bound for $\tau$ which is slightly less than the expected hitting time, which by the additive drift theorem is at most $\frac{b - a}{\eps}$. Hence we aim at proving an upper bound on $\Pr[Y_\tau \ge c]$ for all $c$ such that $\frac{b - c}{\eps}$ is as close to ${b - a}{\eps}$ as possible.
+    \Pr[T \le B] = \Pr[\forall t \in[1..B] \  X_t < b] = \Pr[\forall t \in[1..B] \  Y_t < c].
+\end{align*}
+Note that this works only for $B < \frac{b - a - c}{\eps}$, which is less than the expected hitting time, since by the additive drift theorem we have
+\begin{align*}
+    E[T] \ge \frac{b - a}{\delta} > \frac{b - a - c}{\eps}.
+\end{align*}
+
+The main difference between the methods shown in~\cite{Kotzing16} and~\cite{AntipovDK19} is in how they estimate $\Pr[\forall t \in[1..B] \  Y_t < c]$. In~\cite{Kotzing16} we consider $Y_t$ which are sub-Gaussian processes and estimate the probability that they do not exceed $c$ using some tools specific for the sub-Gaussian processes. In~\cite{AntipovDK19} we consider $Y_t$ which are a subject to the Hajek's negative drift theorem. 
+
+We describe these two approaches in more details in this section.
+
+We also note that we can obtain the upper tail bounds (that is, estimates on the probability $\Pr[T > B]$) with similar arguments. For this we also need to use a decomposition $X_t = Y_t + \eps t$, but now we require
+\begin{enumerate}
+    \item the expected progress to be bounded from below by some $\delta > 0$ and
+    \item $Y_t$ to be a sub-martingale.
+\end{enumerate}  
 
 \subsection{Negative drift}
+
+In this section we discuss the Hajek's negative drift theorem, which is most commonly used in the following form.
+
 \begin{theorem}[Drift Theorem for Lower Bounds] \label{thm:neat}
     Let $\{X_t\}_{t \ge 0}$ be a Markow process over a finite set of states $\mathbb{S}$, and $\mathbf{g} : \mathbb{S} \rightarrow \mathbb{R}$ a function that assigns to every state a non-negative real numbers. Pick two real numbers $a$ and $b$ such that $a < b$ and let the random variable $T$ denote
     the earliest point in time $t \ge 0$ where $\mathbf{g}(X_t) \leq a$ holds.
@@ -115,7 +138,7 @@ Our goal is to have this bound for $\tau$ which is slightly less than the expect
     \end{equation}
 \end{theorem}
 
-To prove this theorem we use the following lemma from \cite{Hajek 82}
+This form of the theorem is not stated in~\cite{Hajek82} and we are not aware of any proof which derives it from the results of Hajek's paper. Hence we present a simple proof of the negative drift theorem which is based on the following lemma from~\cite{Hajek82}.
 
 \begin{lemma}[Lemma 2.8 in \cite{Hajek 82}] \label{lm:haj}
     If conditions 2 and 3 are met then for all $t \geq 0$ we have
