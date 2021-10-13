@@ -121,15 +121,15 @@ We also note that we can obtain the upper tail bounds (that is, estimates on the
 In this section we discuss the Hajek's negative drift theorem, which is most commonly used in the following form.
 
 \begin{theorem}[Drift Theorem for Lower Bounds] \label{thm:neat}
-    Let $\{X_t\}_{t \ge 0}$ be a Markow process over a finite set of states $\mathbb{S}$, and $\mathbf{g} : \mathbb{S} \rightarrow \mathbb{R}$ a function that assigns to every state a non-negative real numbers. Pick two real numbers $a$ and $b$ such that $a < b$ and let the random variable $T$ denote
-    the earliest point in time $t \ge 0$ where $\mathbf{g}(X_t) \leq a$ holds.
+    Let $\{X_t\}_{t \ge 0}$ be a Markow process over a finite set of states $\mathbb{S}$, and $\mathbf{g} : \mathbb{S} \rightarrow \mathbb{R}$ a function that assigns to every state a non-negative real numbers. Let $a$ and $b$ be some real numbers such that $a < b$ and let the random variable $T$ denote
+    the earliest point in time $t$ when $\mathbf{g}(X_t) \leq a$ holds.
 
-    If there are constants $\lambda > 0$, $D \ge 1$, and a $p > 1$ taking only positive values, for which the following four conditions hold
+    If there are constants $\lambda > 0$, $D \ge 1$, and $p > 1$ such that the following three conditions hold
     \renewcommand\labelenumi{(\theenumi)}
     \begin{enumerate}
         \item $\gfun(X_0) \ge b$,
-        \item $\forall t \ge 0 E\left[e^{-\lambda(\gfun(X_{t + 1} - \gfun(X_t)))} |\ X_t,\ \gfun(X_t) < b\right] \leq 1 - \frac{1}{p} =: \rho$,
-        \item $\forall t \ge 0 E\left[e^{-\lambda(\gfun(X_{t + 1} - b))} |\ X_t,\ \gfun(X_t) \ge b\right] \leq D$,
+        \item for all \(t \geq 0\) $ E\left[e^{-\lambda(\gfun(X_{t + 1}) - \gfun(X_t))} \Big|\ X_t,\ \gfun(X_t) < b\right] \leq 1 - \frac{1}{p} =: \rho$ and
+        \item for all \(t \geq 0\) $ E\left[e^{-\lambda(\gfun(X_{t + 1}) - b)} \Big|\ X_t,\ \gfun(X_t) \ge b\right] \leq D$,
     \end{enumerate}
     then for all time bounds $B \ge 0$ the probability that $T$ exceeds $B$ is at most
 
@@ -140,7 +140,7 @@ In this section we discuss the Hajek's negative drift theorem, which is most com
 
 This form of the theorem is not stated in~\cite{Hajek82} and we are not aware of any proof which derives it from the results of Hajek's paper. Hence we present a simple proof of the negative drift theorem which is based on the following lemma from~\cite{Hajek82}.
 
-\begin{lemma}[Lemma 2.8 in \cite{Hajek 82}] \label{lm:haj}
+\begin{lemma}[Lemma 2.8 in \cite{Hajek82}] \label{lm:haj}
     If conditions 2 and 3 are met then for all $t \geq 0$ we have
 
     $$\Pr[\gfun(X_t) \leq a] \leq \rho^te^{\lambda(a - \gfun(X_0))} + \frac{1 - \rho^t}{1 - \rho} D e^{\lambda(a - b)}$$
@@ -177,7 +177,13 @@ This form of the theorem is not stated in~\cite{Hajek82} and we are not aware of
 
 \end{proof}
 \subsection{Theorem for sub-gaussian processes}
-\cm
+
+\begin{theorem}
+    Suppose $X_t$ has a drift of at most $\varepsilon > 0$ and $(X_t - \varepsilon t)$ is $(c, \delta)$ - sub-Gaussian. Let \(X_0\) be \(a \in \mathbb{R}\) and let \(T\) be the first moment in time when \(X_t\) exceeds some \(b > a\). Then for all \(s \leq \frac{b - a}{2\varepsilon}\) we have
+
+    \[\Pr[T \leq s] \leq exp\left(-\frac{b - a}{4} min\left(\delta, \frac{b - a}{2cs}\right)\right)\]
+\end{theorem}
+
 \subsection{Comparing requirements}
 \label{sec:compare}
 % To use some versions of drift theorems, we need some requirements on the sequence of random variables to be satisfied, such as the following:
@@ -199,11 +205,11 @@ At the same time the negative drift theorem is applicable when there exist $\del
 $$
     E\left[e^{\gamma (X_{t + 1} - X_{t})}\right] \leq 1 - \frac{1}{p}\ .$$
 
-To compare rigors of requirements we need to explore behavior $E[e^{\gamma X}]$ depending to $\gamma$. This behavior depends on the distribution $X$, hence we consider the two cases for continuos and for discrete distributions.
+To compare rigors of requirements we need to explore behavior of $E[e^{\gamma X}]$ depending to $\gamma$. This behavior depends on the distribution $X$, hence we consider the two cases for continuos and for discrete distributions.
 
 \subsubsection*{Continuos distribution}
 
-By the definition of expectation of a function we have
+By the definition of the expectation of a function we have
 \[
     E[e^{\gamma X}] = \int_{-\infty}^{+\infty} f(x) e^{\gamma x} \,dx,
 \]
@@ -212,7 +218,7 @@ where $f(x)$ is a probability density function for $X$.
 
 \hfill
 
-We compute the first derivative of this expectation over $\gamma$
+Since we assume thet the integral is converging, compute the first derivative of this expectation over $\gamma$
 
 \begin{align*}
     \frac{\partial E[e^{\gamma X}]}{\partial \gamma} & = \frac{\partial}{\partial \gamma} \int_{-\infty}^{+\infty} f(x) e^{\gamma x} \, dx = \int_{-\infty}^{+\infty} f(x) \frac{\partial e^{\gamma x}}{\partial \gamma} \, dx = \int_{-\infty}^{+\infty} x f(x) e^{\gamma x} \, dx = \\
@@ -233,15 +239,15 @@ Therefore,
     & = E[X] + \gamma \int_{0}^{+\infty} x^2 f(x) \, dx.
 \end{align*}
 
-We denote $c = \int_{0}^{+\infty} x^2 f(x) \, dx \geq 0$.If we integrate the inequality above, we obtain a lower bound on the expectation.
+We denote $c = \int_{0}^{+\infty} x^2 f(x) \, dx \geq 0$. If we integrate the inequality above, we obtain a lower bound on the expectation.
 
 \[
-    E[e^{\gamma X}] = E[1] + \int_0^\gamma \frac{\partial E[e^{\gamma X}]}{\partial \gamma} \, d\gamma \geq 1 + \gamma E[X] + \gamma^2 \frac{c}{2}.
+    E[e^{\gamma X}] = E[e^{0}] + \int_0^\gamma \frac{\partial E[e^{\gamma X}]}{\partial \gamma} \, d\gamma \geq 1 + \gamma E[X] + \gamma^2 \frac{c}{2}.
 \]
 
 \subsubsection*{Discrete distribution}
 
-In the same way we consider the expectation of function by definition
+We now show a similar result for a discrete r.v. X. Consider the expectation of function by definition
 
 \begin{align*}
     E[e^{\gamma X}] = \sum_{i = 1}^{+\infty} e^{\gamma x_i} \Pr[x = x_i].
@@ -249,14 +255,13 @@ In the same way we consider the expectation of function by definition
 
 % \hfill
 
-Denote set $P = \{i \in \mathbb{N}: x_i \geq 0\}$. Hence
+Let $P$ be the set of indices of non-negative values of X that is \(P = \{i \in \mathbb{N} : x_i \geq 0\}\). Hence
 
 \begin{align*}
     E[e^{\gamma X}] = \sum_{i = 1}^{+\infty} e^{\gamma x_i} Pr[x = x_i] = \sum_{i \in P} e^{\gamma x_i} Pr[x = x_i] + \sum_{i \in \mathbb{N}\setminus P} e^{\gamma x_i} Pr[x = x_i],
 \end{align*}
 
-When we take the first derivative we can split to two group, first of which are terms with indices from $P$ set and others
-% В таком случае, аналогично возьмем производную и рассмотрим пот отдельности слагаемые из множества P и остальные:
+Therefore, we compute the derivative of \(E\left[e^{\gamma X}\right]\)
 
 \begin{align*}
     \der{E[e^{\gamma X}]}{\gamma} & = \sum_{i = 1}^{+\infty} \frac{\partial e^{\gamma x_i}}{\partial \gamma} Pr[x = x_i] = \sum_{i = 1}^{+\infty} x_i e^{\gamma x_i} Pr[x = x_i] \\
@@ -271,11 +276,13 @@ We denote $c = \sum_{i \in P} x_i^2 Pr[x = x_i] \geq 0$ and obtain a bound simil
     E[e^{\gamma X}] \geq 1 + \gamma E[X] + \gamma^2 \frac{c}{2}
 \]
 
-Since the bounds for both cases are the same, we do not distinguish cases for continuos and discrete v.v.
+
+We obtained a similar lower bound, apart from the constant \(c\). Hence,
+further in this section we do not specify if consider a process has a continuous or discrete distribution. Note also that in both cases \(c\) is bounded by the second momentum of \(X\).
 
 \subsubsection{Impracticability for positive drift}
 
-In this case, the expectation of the exponent cannot be lower than 1, and also in the some neighborhood of zero it grows faster than any $e^{\frac{\gamma^2 c}{2}}$, since
+When we have \(E\left[X\right] > 0\), the expectation of the exponent cannot be lower than 1, and also in the some neighborhood of zero it grows faster than any $e^{\frac{\gamma^2 c}{2}}$, since
 
 $$\frac{\partial e^{\frac{\gamma^2 c}{2}}}{\partial \gamma} = c\gamma e^{\frac{\gamma^2 c}{2}} = g(\gamma),$$
 
@@ -288,7 +295,7 @@ Hence, both requirements are not feasible.
 \subsubsection{Zero drfit case}
 \label{sec:zero}
 
-In this section we consider some specific family of continuos distributions with symmetric probability density functions, because their expectation equals 0.
+We consider some specific family of continuos distributions with symmetric probability density functions with zero expectation.
 
 \paragraph*{Exponent of polynomial}
 
@@ -296,18 +303,17 @@ In this section we consider some specific family of continuos distributions with
 
 \hfill
 
-Consider function
+Consider random variable \(X_a\) with probability density
 
-$$f(x) = c \expx{a},\ a > 0.$$
+$$f(x) = c \expx{a},$$
+
+where \(a > 0\) is a parameter of the distribution.
 
 Compute $c$
 
 \begin{align*}
-    \infint{f(x)} & = \infint{c\expx{a}} = 1,
-\end{align*}
-
-\begin{align*}
-    \infint{\expx{a}} = 2\infintpoz{\expxpoz{a}}.
+    \infint{f(x)} & = \infint{c\expx{a}} = 1, \\
+    \infint{\expx{a}} & = 2\infintpoz{\expxpoz{a}}.
 \end{align*}
 
 We denote
@@ -334,16 +340,16 @@ We compute the n-th momentum of $X$ (expectation от $X^n$) as follows
     E[X^n] = \infint{f(x) x^n} = \frac{\Gamma(\frac{n + 1}{a})}{2\Gamma(\frac{1}{a})} (1 + (-1)^n)
 \end{align*}
 
-Then we can consider $e^{\gamma X}$ as a infinite series
+Note that all odd momentums are zero. 
+
+Now we consider $e^{\gamma X}$ as a infinite series.
 
 \begin{align*}
     E[e^{\gamma X}] = E\left[\sum_{n = 0}^{+\infty}\frac{(\gamma X)^n}{n!}\right] & = \sum_{n = 0}^{+\infty}\gamma^n\frac{E[X^n]}{n!} = \sum_{n = 0}^{+\infty}\gamma^{2n}\frac{E[X^{2n}]}{2n!} =                                \\
     & = \sum_{n = 0}^{+\infty}\frac{(\gamma^2)^{n}}{n!}\left(\frac{E[X^{2n}]n!}{2n!}\right) = \sum_{n = 0}^{+\infty}\frac{(\gamma^2)^{n}}{n!} a_n,
 \end{align*}
 
-Where by $a_n$ we denote $\frac{E[X^{2n}]n!}{2n!}$ for all $n \in \mathbb{N}$.
-
-Third equality is satisfied because all odd momentums are 0 due to the symmetry of the function.
+where by $a_n$ we denote $\frac{E[X^{2n}]n!}{2n!}$ for all $n \in \mathbb{N}$.
 
 Consider the limit of the sequence $\{\sqrt[n]{a_n}\}_{n \in \mathbb{N}}$
 
@@ -359,13 +365,18 @@ Consider the limit of the sequence $\{\sqrt[n]{a_n}\}_{n \in \mathbb{N}}$
     & = \lim_{n \to +\infty} \frac{e}{4n} \left(\frac{2n}{ae}\right)^{\frac{2}{a}} = \left(\frac{e^{1 - \frac{2}{a}}}{2^{2 - \frac{2}{a}} a^\frac{2}{a}}\right) \lim_{n \to +\infty} n^{\frac{2}{a} - 1}.
 \end{align*}
 
-We now consider two cases depending on the value of $a$
+We now consider two cases depending on the value of the parameter $a$ of r.v. \(X\).
+
 \begin{caseof}
     \case{$a \geq 2$}{
 
-        Then $A$ exist, which implies that there exist $C > 0$ such that
-        $\forall n \geq 0 a_n \leq C^n$.
-        Hence $E[e^{\gamma X}] \leq e^{\gamma^2 C}.$
+        Then $A$ is finite, which implies that there exist $C > 0$ such that
+        for all $ n \geq 0 $ we have $a_n \leq C^n$.
+        Hence $E[e^{\gamma X}] \leq e^{\gamma^2 C}$, because
+
+        \[
+            E[e^{\gamma X}] = \sum_{n = 0}^{+\infty}\frac{(\gamma^2)^{n}}{n!} a_n \leq \sum_{n = 0}^{+\infty}\frac{(\gamma^2 C)^{n}}{n!} = e^{\gamma^2 C}
+        \]
     }
     \case{$a < 2$}{
 
@@ -375,9 +386,9 @@ We now consider two cases depending on the value of $a$
 
 \hfill
 
-We can compute same limit for $\{\sqrt[n]{\frac{a_n}{n!}}\}_{n \in \mathbb{N}}$ and threshold regarding to $a$ is 1, where only for $a \geq 1$ series converge.
+We can compute the same limit for $\{\sqrt[n]{\frac{a_n}{n!}}\}_{n \in \mathbb{N}}$ and the threshold regarding to $a$ is 1, where only for $a \geq 1$ series converge.
 
-In this case we need to explore behavior of series when $a \in (1, 2)$. By another definition of sub-gaussian process
+In this case we need to study the behavior of series when $a \in (1, 2)$. By another definition of sub-gaussian process
 
 $$\exists K > 0 \ \forall p \geq 1 \left(E[X^p]\right)^{\frac{1}{p}} \leq K \sqrt{p}.$$
 
