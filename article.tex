@@ -17,6 +17,7 @@
 \usepackage{pgfplots}
 \usepackage{tikz}
 \usepackage{subcaption}
+\usepackage{mathtools}
 
 \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
 \definecolor{darkGreen}{RGB}{31, 140, 47}
@@ -27,8 +28,6 @@
 % \date{04-08-2021}
 
 \newcommand\setItemnumber[1]{\setcounter{enumi}{\numexpr#1-1\relax}}
-\newtheorem*{definition}{Definition}
-% \newtheorem{definition*}{Definition}
 
 \newcommand{\gfun}{\mathbf{g}}
 
@@ -178,19 +177,34 @@ This form of the theorem is not stated in~\cite{Hajek82} and we are not aware of
     \end{align*}
 
 \end{proof}
-\subsection{Theorem for sub-gaussian processes}
+\subsection{Sub-Gaussian processes}
 
-\begin{definition}
-    Process \(\{X_t\}_{t \geq 0}\) is called \underline{\((c, \delta)\)-sub-Gaussian} if for all \(t \geq 0\) and for all \(\lambda \in [0, \delta]\)
+In~\cite{Kotzing16} the authors use the notion of sub-Gaussian processes, which are (informally speaking) the processes such that their steps are dominated by a normal distribution. More formally, a process $\{X_t\}_{t\in\N}$ is called $((c_t)_{t \in \N}, \delta)$-sub-Gaussian, iff for all $t \in \N$ and for all $\lambda \in [0, \delta]$ we have
+\begin{align*}
+    E\left[e^{\lambda(X_{t + 1} - X_t)} \mid X_1, \dots X_t\right] \le e^{z^2c_t/2}.
+\end{align*}
+If $c_t$ is equal to some $c$ for all $t \in \N$, then the process is called $(c, \delta)$-sub-Gaussian.
+As it was noted in~\cite{Kotzing16}, all sub-Gaussian processes are super-martingales, that is, for all $t \in \N$ we have
+\begin{align*}
+    E[X_{t + 1} - X_t \mid X_1, \dots, X_t] \le 0.
+\end{align*}
 
-    \[E[e^{\lambda(X_{t + 1} - X_{t})}] \leq e^{\frac{\lambda^2 c}{2}}\]
-\end{definition}
+For such processes we have the following theorem (we slightly change the formulation in order to compare it with the negative drift approach).
 
-\begin{theorem}[Theorema 14 in \cite{Kotzing16}]
-    Suppose $X_t$ has a drift of at most $\varepsilon > 0$ and $(X_t - \varepsilon t)$ is $(c, \delta)$-sub-Gaussian. Let \(X_0\) be \(a \in \mathbb{R}\) and let \(T\) be the first moment in time when \(X_t\) exceeds some \(b > a\). Then for all \(s \leq \frac{b - a}{2\varepsilon}\) we have
-
-    \[\Pr[T \leq s] \leq exp\left(-\frac{b - a}{4} min\left(\delta, \frac{b - a}{2cs}\right)\right)\]
+\begin{theorem}[Theorem 11 in~\cite{Kotzing16}]
+    Let $\{X_t\}_{t \in \N}$ be $((c_t)_{t \in \N}, \delta)$-sub-Gaussian. For all $t \in \N$ let $C_t \coloneqq \sum_{i = 1}^{t - 1} c_i$. Let $x>0$ be some constant and let $T$ be the minimum $t$ such that when $X_t \ge X_0 + x$. Then for all time bounds $B \in \N$ we have
+    \begin{align*}
+        \Pr\left[T \le B\right] \le \exp\left(-\frac{x}{2}\min\left\{\delta, \frac{x}{C_B}\right\}\right).
+    \end{align*}
 \end{theorem}
+
+
+
+% \begin{theorem}
+%     Suppose $X_t$ has a drift of at most $\varepsilon > 0$ and $(X_t - \varepsilon t)$ is $(c, \delta)$ - sub-Gaussian. Let \(X_0\) be \(a \in \mathbb{R}\) and let \(T\) be the first moment in time when \(X_t\) exceeds some \(b > a\). Then for all \(s \leq \frac{b - a}{2\varepsilon}\) we have
+
+%     \[\Pr[T \leq s] \leq exp\left(-\frac{b - a}{4} min\left(\delta, \frac{b - a}{2cs}\right)\right)\]
+% \end{theorem}
 
 \subsection{Comparing requirements}
 \label{sec:compare}
