@@ -27,6 +27,8 @@
 % \date{04-08-2021}
 
 \newcommand\setItemnumber[1]{\setcounter{enumi}{\numexpr#1-1\relax}}
+\newtheorem*{definition}{Definition}
+% \newtheorem{definition*}{Definition}
 
 \newcommand{\gfun}{\mathbf{g}}
 
@@ -178,8 +180,14 @@ This form of the theorem is not stated in~\cite{Hajek82} and we are not aware of
 \end{proof}
 \subsection{Theorem for sub-gaussian processes}
 
-\begin{theorem}
-    Suppose $X_t$ has a drift of at most $\varepsilon > 0$ and $(X_t - \varepsilon t)$ is $(c, \delta)$ - sub-Gaussian. Let \(X_0\) be \(a \in \mathbb{R}\) and let \(T\) be the first moment in time when \(X_t\) exceeds some \(b > a\). Then for all \(s \leq \frac{b - a}{2\varepsilon}\) we have
+\begin{definition}
+    Process \(\{X_t\}_{t \geq 0}\) is called \underline{\((c, \delta)\)-sub-Gaussian} if for all \(t \geq 0\) and for all \(\lambda \in [0, \delta]\)
+
+    \[E[e^{\lambda(X_{t + 1} - X_{t})}] \leq e^{\frac{\lambda^2 c}{2}}\]
+\end{definition}
+
+\begin{theorem}[Theorema 14 in \cite{Kotzing16}]
+    Suppose $X_t$ has a drift of at most $\varepsilon > 0$ and $(X_t - \varepsilon t)$ is $(c, \delta)$-sub-Gaussian. Let \(X_0\) be \(a \in \mathbb{R}\) and let \(T\) be the first moment in time when \(X_t\) exceeds some \(b > a\). Then for all \(s \leq \frac{b - a}{2\varepsilon}\) we have
 
     \[\Pr[T \leq s] \leq exp\left(-\frac{b - a}{4} min\left(\delta, \frac{b - a}{2cs}\right)\right)\]
 \end{theorem}
