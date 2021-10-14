@@ -286,9 +286,10 @@ When we have \(E\left[X\right] > 0\), the expectation of the exponent cannot be 
 
 $$\frac{\partial e^{\frac{\gamma^2 c}{2}}}{\partial \gamma} = c\gamma e^{\frac{\gamma^2 c}{2}} = g(\gamma),$$
 
-Note that $g(0) = 0$, while $E[X] > 0$, therefore, that in any neighborhood of zero we have
+Note that $g(0) = 0$, while $E[X] > 0$, therefore, that in any neighborhood of zero we have that for all \(c>0\) exists \(\gamma_c > 0\)  that for all \(\gamma \in (0, \gamma_c)\) 
 
-$$\forall c > 0 \, \exists \gamma_c > 0 \, \forall \gamma \in (0, \gamma_c) e^{\frac{\gamma^2 c}{2}} < E[e^{\gamma X}],$$
+$$e^{\frac{\gamma^2 c}{2}} < E[e^{\gamma X}],$$
+
 
 Hence, both requirements are not feasible.
 
@@ -408,9 +409,7 @@ In this case, similarly to the positive drift case, it is the summand equal to t
 
 $$\frac{\partial E[e^{\gamma x}]}{\partial \gamma} \Big|_{\gamma = 0} = E[X] < 0.$$
 
-Hence both requirements are feasible, since we have
-
-$$\exists \gamma_0 > 0 \forall \gamma \in (0, \gamma_0) E[e^{\gamma X}] < 1.$$
+Hence both requirements are feasible, since we have that exists \(\gamma_0\) such that for all \(\gamma \in (0, \gamma_0)\) $E[e^{\gamma X}] < 1.$
 
 Consequently proving that the process is sub-gaussian is tantamount to finding $p$ in the second requirements.
 
