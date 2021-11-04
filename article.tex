@@ -199,7 +199,6 @@ For such processes we have the following theorem (we slightly change the formula
 \end{theorem}
 
 
-
 % \begin{theorem}
 %     Suppose $X_t$ has a drift of at most $\varepsilon > 0$ and $(X_t - \varepsilon t)$ is $(c, \delta)$ - sub-Gaussian. Let \(X_0\) be \(a \in \mathbb{R}\) and let \(T\) be the first moment in time when \(X_t\) exceeds some \(b > a\). Then for all \(s \leq \frac{b - a}{2\varepsilon}\) we have
 
@@ -606,6 +605,54 @@ Example for $X \sim \mathcal{N}(1, 1)$:
 In the case of $\textbf{\text{zero}}$ expectation we cannot always guarantee sub-gausality, which has been proved by the example of series of even functions $\expx{a}$.
 
 In the case of $\textbf{\text{positive}}$ expectation both criteria are not feasible, and if it is $\textbf{\text{negative}}$, then both are feasible.
+
+\subsection{Comparing results for processes with negative drifts}
+
+Consider a process \( \{ X_n \}_{n \in \mathbb{N}}\) with negative drift (i.e. \(E[X_{t + 1} - X_{t} | X_t = s] < 0\) for all \(s\)) and special requirement for probability:
+
+\[
+    \Pr[X_{t + 1} - X_{t} = j] \leq \frac{r}{(1 + \varepsilon)^{j + c}},
+\]
+
+for some \(\varepsilon, r, c > 0\) and for all \(j \geq -c\).
+
+Because this process has negative drift we need to impose restrictions for values of \(c\). Also because summation of probabilities for all possible values of \(X_{t + 1} - X_{t}\) must be equals 1 we need to find \(r\).
+
+\begin{align*}
+    \sum_{j = -c}^{+\infty} Pr[X_{t + 1} - X_t = j] &\leq \sum_{j = -c}^{+\infty} \frac{r}{(1 + \varepsilon)^{j + c}} = r \sum_{j = 0}^{+\infty} \frac{1}{(1 + \varepsilon)^{j}} \\
+    1 &\leq r \frac{1}{1 - \frac{1}{1 + \varepsilon}} = r \frac{1 + \varepsilon}{\varepsilon} \\
+    r &\geq \frac{\varepsilon}{1 + \varepsilon} 
+\end{align*}
+
+Consider \(\Delta_t = X_{t + 1} - X_{t}\), than compute \(E[\Delta_t]\):
+
+\begin{align*}
+    E[\Delta_t] &= \sum_{j = -c}^{+\infty} j Pr[\Delta_t = j] \leq \sum_{j = -c}^{+\infty} j \frac{r}{(1 + \varepsilon)^{j + c}} \leq \sum_{j = 0}^{+\infty} (j - c) \frac{\varepsilon}{(1 + \varepsilon)^{j + 1}} = \\
+    &= \sum_{j = 0}^{+\infty} j \frac{\varepsilon}{(1 + \varepsilon)^{j + 1}} - c \sum_{j = 0}^{+\infty}\frac{\varepsilon}{(1 + \varepsilon)^{j + 1}} = \frac{1}{\varepsilon} - c
+\end{align*}
+
+Also compute \(E\left[e^{\gamma \Delta_t}\right]\) for all positive \(\gamma\):
+
+\begin{align*}
+    E[e^{\gamma \Delta_t}] &= \sum_{j = -c}^{+\infty} e^{\gamma j} \Pr[\Delta_t = j] \leq e^{-\gamma c} \sum_{j = 0}^{+\infty} e^{\gamma j} \frac{\varepsilon}{(1 + \varepsilon)^{j + 1}} = \\
+    &= e^{-\gamma c} \frac{\varepsilon}{1 + \varepsilon} \sum_{j = 0}^{+\infty} \left(\frac{e^\gamma}{1 + \varepsilon}\right)^j = e^{-\gamma c} \frac{\varepsilon}{1 + \varepsilon} \frac{1}{(1 - \frac{e^\gamma}{1 + \varepsilon})} = \frac{\varepsilon e^{-\gamma c}}{(1 + \varepsilon) - e^\gamma} 
+\end{align*}
+
+Finding minimum of previous function can be useful, so lets find \(\gamma_0\) where \(\frac{\partial E[e^{\gamma \Delta_t}]}{\partial \gamma} = 0\):
+
+\begin{align*}
+    \frac{\partial E[e^{\gamma \Delta_t}]}{\partial \gamma} &= \frac{\partial }{\partial \gamma} \left(\frac{\varepsilon e^{-\gamma c}}{(1 + \varepsilon) - e^\gamma}\right) = \varepsilon \frac{-c e^{-\gamma c} (1 + \varepsilon - e^\gamma) - e^{-\gamma c}(-e^\gamma)}{(1 + \varepsilon - e^\gamma)^2} = \\
+    &= \frac{-\varepsilon e^{-\gamma c}}{(1 + \varepsilon - e^\gamma)^2} (e^\gamma (c + 1) - c (1 + \varepsilon)) = 0
+\end{align*}
+\begin{align*}
+    e^{\gamma_0} (c + 1) - c (1 + \varepsilon) = 0
+\end{align*}
+\begin{align*}
+    \gamma_0 = \ln\left(\frac{c}{c + 1}(1 + \varepsilon)\right)
+\end{align*}
+
+
+
 
 \section{Tail bounds}
 \subsection{Upper bounds}
