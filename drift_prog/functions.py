@@ -54,33 +54,31 @@ def p(eps: float, shift: float) -> callable:
 
 def negative_drift_probability_(eps: float, shift: float) -> callable:
     p_actual = p(eps, shift)
-    expect = -expection(eps, shift)
     def func(dist: float, gamma: float) -> float:
-        return dist / expect * p_actual(gamma) * np.exp(-gamma * dist)
+        return dist / shift * p_actual(gamma) * np.exp(-gamma * dist)
     return func
 
 def negative_drift_probability(eps: float, shift: float) -> callable:
     neg_pr = negative_drift_probability_(eps, shift)
     left   = np.log(shift * (1 + eps) / (1 + shift))
-    right  = np.log(1 + eps) - 0.01
+    right  = np.log(1 + eps) - 0.001
     exp2   = exponential_expection(eps, shift)
 
-    middle = find_intersection(lambda _: 1, exp2, (left, right)) - 0.01
+    middle = find_intersection(lambda _: 1, exp2, (left, right)) - 0.001
 
     def func(dist: float) -> float:
         gamma0 = find_min_of(lambda g: neg_pr(dist, g), (left, middle))
-        return neg_pr(gamma0, dist)
+        return neg_pr(dist, gamma0)
     
     return func
 
 def sub_gaussian_probability(eps: float, shift: float) -> callable:
-    expect = -expection(eps, shift)
     left  = np.log(shift * (1 + eps) / (1 + shift))
-    right = np.log(1 + eps) - 0.01
+    right = np.log(1 + eps) - 0.001
     exp2 = exponential_expection(eps, shift)
     def func(dist: float, const: float) -> float:
         gauss = sub_gaussian(const)
         delta0 = find_intersection(exp2, gauss, (left, right))
-        return np.exp(-dist / 2 * min(delta0, expect / const))
+        return np.exp(-dist / 2 * min(delta0, shift / const))
     return func
 
