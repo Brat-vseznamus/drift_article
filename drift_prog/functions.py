@@ -1,5 +1,4 @@
 import numpy as np
-# import np
 
 def composition(f:callable, g:callable) -> callable:
     def cmp(x):
