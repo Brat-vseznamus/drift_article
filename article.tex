@@ -31,6 +31,8 @@
 \DeclareMathOperator*{\argmin}{arg\,min}
 
 \newcommand{\gfun}{\mathbf{g}}
+\newcommand{\Lim}[1]{\raisebox{0.5ex}{\scalebox{0.8}{$\displaystyle \lim_{#1}\;$}}}
+
 
 \newcounter{casenum}
 \newenvironment{caseof}{\setcounter{casenum}{1}}{\vskip.5\baselineskip}
@@ -41,6 +43,8 @@
 \newtheorem{lemma}[theorem]{Lemma}
 \theoremstyle{remark}
 \newtheorem*{remark}{Remark}
+\theoremstyle{definition}
+\newtheorem*{exmp}{Example}
 
 \newcommand{\expx}[1]{e^{-|x|^{#1}}}
 \newcommand{\expxpoz}[1]{e^{-x^{#1}}}
@@ -49,6 +53,7 @@
 \newcommand{\der}[2]{\frac{\partial #1}{\partial #2}}
 \newcommand{\cm}{coming soon\dots}
 \newcommand{\expp}[1]{E[e^{#1 \Delta_t}]}
+\newcommand{\limd}{\lim\limits_{d \to +\infty}}
 
 \newcommand{\underrel}[2]{\mathrel{\mathop{#2}\limits_{#1}}}
 
@@ -683,7 +688,132 @@ Define some variables for next calculations:
         \gamma_m \in [\gamma_0, \gamma_1)
     \end{align*}
 
+    Obvious that \(\lim\limits_{d \to +\infty} \gamma_m = \gamma_1\).
+
+    \item \(c_m\) - value of parameter \(c\) when \(\delta_0 = \frac{s}{c}\)
+    
+    We can calculate it from definition of \(\delta_0\):
+
+    \begin{gather*}
+        E[e^{\delta_0 \Delta_t}] = e^{\frac{c}{2}\delta_0^2} \\
+        \frac{\varepsilon e^{-\frac{s^2}{c_m}}}{(1 + \varepsilon) - e^{\frac{s}{c_m}}}  = e^{\frac{s^2}{2c_m}} \\
+        \varepsilon = ((1 + \varepsilon) - e^{\frac{s}{c_m}}) e^{\frac{3s^2}{2c_m}}
+    \end{gather*}
+
+    We know that \(e^{\frac{s}{c_m}} \in [1, 1 + \varepsilon)\), so let us denote \(\delta = e^{\frac{s}{c_m}} - 1\)
+
+    \begin{gather*}
+        \varepsilon = (1 + \varepsilon - 1 - \delta) (1 + \delta)^{\frac{3s}{2}} \\
+        \frac{e}{e - \delta} = (1 + \delta)^{\frac{3s}{2}} \\
+        1 + \frac{\delta}{\varepsilon - \delta} = (1 + \delta)^{\frac{3s}{2}}
+    \end{gather*}
+
+    Let us denote \(\alpha = \frac{3s}{2}\). By using Taylor series we have \((1 + \delta)^{\alpha} \geq 1 + \alpha \delta + \frac{\alpha (\alpha - 1)}{2} \delta^2\)
+
+    \begin{gather*}
+        1 + \frac{\delta}{\varepsilon - \delta} \geq 1 + \alpha \delta + \frac{\alpha (\alpha - 1)}{2} \delta^2 \\
+        \frac{1}{\varepsilon - \delta} \geq \alpha + \frac{\alpha (\alpha - 1)}{2} \delta \\
+        \frac{1}{\alpha} \geq \delta^2 \left(-\frac{\alpha - 1}{2}\right) + \delta \left(\frac{\alpha - 1}{2}\varepsilon - 1\right) + \varepsilon \\
+        \delta^2\left(\frac{\alpha - 1}{2}\right) + \delta \left(1 - \frac{\alpha - 1}{2}\varepsilon\right) + \left(\frac{1}{\alpha} - \varepsilon\right) \geq 0 \\
+        \delta \approxeq \frac{\frac{\alpha - 1}{2}\varepsilon - 1 + \sqrt{\left(1 - \frac{\alpha - 1}{2}\varepsilon\right)^2 - 2 (\alpha - 1)(\frac{1}{\alpha} - \varepsilon)}}{\alpha - 1} \\
+        \delta \approxeq \frac{\varepsilon}{2} - \frac{1}{\alpha - 1} + \sqrt{\left(\frac{\varepsilon}{2} - \frac{1}{\alpha - 1}\right)^2 + 2 \frac{\alpha \varepsilon - 1}{\alpha(\alpha - 1)}} \\
+        \delta \approxeq \frac{\varepsilon}{2} - \frac{1}{\alpha - 1} + \sqrt{\left(\frac{\varepsilon}{2} + \frac{1}{\alpha - 1}\right)^2 - \frac{2}{\alpha^2(\alpha - 1)}} \\
+        \delta \approxeq \varepsilon - \frac{2}{\alpha^2(\varepsilon(\alpha - 1) + 2)}
+    \end{gather*}
+
+    Then we have approximation:
+
+    \begin{gather*}
+        c_m \approxeq \frac{s}{\ln\left(1 + \varepsilon - \frac{2}{\alpha^2(\varepsilon(\alpha - 1) + 2)}\right)}
+    \end{gather*}
+    
+    or 
+
+    \begin{gather*}
+        c_m \approxeq \frac{s}{\ln\left(1 + \frac{\varepsilon}{2} - \frac{1}{\alpha - 1} + \sqrt{\left(\frac{\varepsilon}{2} + \frac{1}{\alpha - 1}\right)^2 - \frac{2}{\alpha^2(\alpha - 1)}}\right)}
+    \end{gather*}
+
+    Second approximation is better, but first is better in demonstration of behavior of 
+    \(c_m\) regarding \(s\) and \(\varepsilon\).
+
+    By why we have \(c_m\) and what it give us? Significance of it is that if we consider probability by sub-gaussian theorem:
+
+    \begin{align*}
+        \Pr \left[T \leq \frac{d}{\varepsilon}\right] \leq e^{- \frac{d}{2} \min\left(\delta_0, \frac{s}{c}\right)},
+    \end{align*}
+
+    if \(c = c_m\) then probability will take the smallest values over values of positive \(c\), because if \(c\) grows then \(\frac{s}{c}\) decreases, but \(\delta_0\) increases since \( e^{\frac{c}{2} \gamma^2}\) grows over \(c\) too.
+
+    \item \(N(d)\) - function of probability for \(d:= \frac{b - a}{2}\) given by negative drift theorem, hence:
+    
+    \begin{align*}
+        N(d) = \frac{d p(\gamma_m)}{s}  e^{-\gamma_m d}
+    \end{align*}
+
+    \item \(G(d)\) - function of probability for \(d:= \frac{b - a}{2}\) given by theorem for sub-gaussian processes, hence:
+    
+    \begin{align*}
+        G(d) = \exp \left(-\frac{d s}{2 c_m}\right)
+    \end{align*}
 \end{itemize}
+
+Consider \(p(\gamma_m)\) in \(N(d)\). By definition of \(\gamma_m\),  \(p(\gamma_m)\) - function over \(d\). We want to find asymptotic behavior regarding \(d\) of it.
+
+Because \(\gamma_m\) - is a point where original probability reaches minimum over \(\gamma\) we have from derivative of probability:
+
+\begin{gather*}
+    \left(\frac{E'_\gamma [e^{\gamma_m \Delta_t}]}{1 - E[e^{\gamma_m \Delta_t}]} - d\right) = 0 \\
+    E'_\gamma [e^{\gamma_m \Delta_t}] p(\gamma_m) = d \\
+    p(\gamma_m) = \frac{d}{E'_\gamma [e^{\gamma_m \Delta_t}]}
+\end{gather*}
+
+We know, that if \(d \to +\infty\) then \(\gamma_m \to 1\), hence \(\lim\limits_{d \to +\infty} \frac{p(\gamma_m)}{d} = \lim\limits_{d \to +\infty} \frac{1}{E'_\gamma [e^{\gamma_m \Delta_t}]} = \frac{1}{E'_\gamma [e^{\gamma_1 \Delta_t}]} \). And because \(\gamma_1\) is independent from \(d\), we conclude:
+
+\begin{align*}
+    p(\gamma_m) = \mathcal{O} (d)
+\end{align*}
+
+Then we want to consider such ratio:
+
+\begin{align*}
+    \limd \frac{\ln(N(d))}{\ln(G(d))}
+\end{align*}
+
+Compute it:
+
+\begin{align*}
+    \limd \frac{\ln(N(d))}{\ln(G(d))} &= \limd \frac{\ln(\frac{d p(\gamma_m)}{s}  e^{-\gamma_m d})}{-\frac{d s}{2 c_m}} = \limd \frac{\ln(d) - \ln(s) + \ln(p(\gamma_m)) - \gamma_m d}{\frac{- d s}{2 c_m}} = \\
+    &= \limd \frac{\ln(\mathcal{O}(\gamma_m)) - \gamma_m d}{\frac{- d s}{2 c_m}} = \limd \frac{\gamma_m d}{\frac{d s}{2 c_m}} = \limd \frac{2 c_m \gamma_m}{s} = \frac{2 \gamma_1 c_m}{s}
+\end{align*}
+
+We conclude that value of this ratio depends from \(s \text{ and } \varepsilon\) and with conditions it is greater than 1 and with another it is less than 1.
+
+\begin{exmp}
+    If \(s \to +\infty\) then \(\gamma_0 \to \ln(1 + \varepsilon)\). Because \(\gamma_0 \leq \gamma_1\) hence \(\gamma_1 \to \ln(1 + \varepsilon)\). 
+    
+    Consider \(\frac{c_m}{s}\):
+
+    \begin{align*}
+        \lim\limits_{s \to +\infty} \frac{c_m}{s} = \lim\limits_{s \to +\infty} \frac{\frac{s}{\ln\left(1 + \varepsilon - \frac{2}{\alpha^2(\varepsilon(\alpha - 1) + 2)}\right)}}{s} = \frac{1}{\ln(1 + \varepsilon)}
+    \end{align*}
+
+    Then:
+
+    \begin{align*}
+        \limd \frac{\ln(N(d))}{\ln(G(d))} = 2 > 1
+    \end{align*}
+\end{exmp}
+
+\begin{exmp}
+    If \(s \to \frac{1}{\varepsilon}\) then \(\gamma_0, \gamma_1 \to 0\), but \(\delta_0\) decreases not so fast.
+
+    If we take \(s = 1.03, \varepsilon = 1\), then \(c_m \approxeq 2.9\) and then:
+
+    \begin{align*}
+        \limd \frac{\ln(N(d))}{\ln(G(d))} \approxeq \frac{2}{3} < 1
+    \end{align*}
+
+\end{exmp}
 
 
 
