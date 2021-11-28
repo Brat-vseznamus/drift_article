@@ -61,10 +61,10 @@ def negative_drift_probability_(eps: float, shift: float) -> callable:
 def negative_drift_probability(eps: float, shift: float) -> callable:
     neg_pr = negative_drift_probability_(eps, shift)
     left   = np.log(shift * (1 + eps) / (1 + shift))
-    right  = np.log(1 + eps) - 0.001
+    right  = np.log(1 + eps) - 0.0001
     exp2   = exponential_expection(eps, shift)
 
-    middle = find_intersection(lambda _: 1, exp2, (left, right)) - 0.001
+    middle = find_intersection(lambda _: 1, exp2, (left, right)) - 0.0001
 
     def func(dist: float) -> float:
         gamma0 = find_min_of(lambda g: neg_pr(dist, g), (left, middle))
@@ -74,7 +74,7 @@ def negative_drift_probability(eps: float, shift: float) -> callable:
 
 def sub_gaussian_probability(eps: float, shift: float) -> callable:
     left  = np.log(shift * (1 + eps) / (1 + shift))
-    right = np.log(1 + eps) - 0.001
+    right = np.log(1 + eps) - 0.0001
     exp2 = exponential_expection(eps, shift)
     def func(dist: float, const: float) -> float:
         gauss = sub_gaussian(const)
@@ -82,3 +82,11 @@ def sub_gaussian_probability(eps: float, shift: float) -> callable:
         return np.exp(-dist / 2 * min(delta0, shift / const))
     return func
 
+def find_min_c_approximation(eps: float, s:float) -> float:
+    alpha = 3/2 * s
+
+    a = (alpha - 1) / 2
+    b = 1 - eps * (alpha - 1) / 2 
+    c = (1/alpha - eps)
+
+    return s/np.log(1 + (-b + np.sqrt(b**2 - 4*a*c)) / (2 * a))
