@@ -90,3 +90,16 @@ def find_min_c_approximation(eps: float, s:float) -> float:
     c = (1/alpha - eps)
 
     return s/np.log(1 + (-b + np.sqrt(b**2 - 4*a*c)) / (2 * a))
+
+def find_min_c(eps: float, shift: float) -> float:
+    left  = np.log(shift * (1 + eps) / (1 + shift))
+    right = np.log(1 + eps) - 0.0001
+    
+    exp2  = exponential_expection(eps, shift)
+
+    g1 = find_intersection(exp2, lambda _: 1, (left, right))
+    middle = find_intersection(lambda _: 1, exp2, (left, right)) - 0.0001
+
+    min_2 = lambda c: shift / c
+    min_1 = lambda c: find_intersection(exp2, sub_gaussian(c), (middle, right))
+    return find_intersection(min_1, min_2, (0.0001, shift/g1 - 0.00001))

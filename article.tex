@@ -783,8 +783,56 @@ Compute it:
 
 \begin{align*}
     \limd \frac{\ln(N(d))}{\ln(G(d))} &= \limd \frac{\ln(\frac{d p(\gamma_m)}{s}  e^{-\gamma_m d})}{-\frac{d s}{2 c_m}} = \limd \frac{\ln(d) - \ln(s) + \ln(p(\gamma_m)) - \gamma_m d}{\frac{- d s}{2 c_m}} = \\
-    &= \limd \frac{\ln(\mathcal{O}(\gamma_m)) - \gamma_m d}{\frac{- d s}{2 c_m}} = \limd \frac{\gamma_m d}{\frac{d s}{2 c_m}} = \limd \frac{2 c_m \gamma_m}{s} = \frac{2 \gamma_1 c_m}{s}
+    &= \limd \frac{\ln(\mathcal{O}(\gamma_m)) - \gamma_m d}{\frac{- d s}{2 c_m}} = \limd \frac{\gamma_m d}{\frac{d s}{2 c_m}} = \limd \frac{2 c_m \gamma_m}{s} = \frac{2 \gamma_1 c_m}{s} = \frac{2 \gamma_1}{\delta_0^m}
 \end{align*}
+
+Where \(\delta_0^m = \delta_0(c_m)\).
+
+Obvious that \(\frac{\gamma_1}{\delta_0^m} \leq 1\) since by definition \(\delta_0^m \geq \gamma_1\). But is true that \(\frac{\gamma_1}{\delta_0^m} \geq \frac{1}{2}\) ?
+
+Consider situation when math expectation in near zero. Then \(\gamma_0 \to 0\) and in some neighborhood of zero sub-gaussian boundary and expectation of exponent will behave as quadratic functions.
+
+In this case denote: 
+
+\begin{align*}
+    E[e^{\gamma \Delta_t}] \approxeq 1 + e_1 \gamma + \frac{e_2}{2} \gamma^2,
+\end{align*}
+
+where \(e_1 = E[\Delta_t],\ e_2 = E[\Delta_t^2]\).
+
+And:
+
+\begin{align*}
+    e^{\frac{c \gamma^2}{2}} \approxeq 1 + \frac{c \gamma^2}{2}
+\end{align*}
+
+Then:
+
+\begin{gather*}
+    \gamma_1 = -\frac{2e_1}{e_2} \\
+    \delta_0 = -\frac{2e_1}{e_2 - c}
+\end{gather*}
+
+But we must best \(\delta_0\), so we must find \(c_m\):
+
+\begin{gather*}
+    \delta_0^m = \frac{s}{c_m} \\
+    -\frac{2e_1}{e_2 -c_m} = \frac{s}{c_m} \\
+    c_m = \frac{s e_2}{s - 2e_1}
+\end{gather*}
+
+Then:
+
+\begin{gather*} 
+    \delta_0^m = \frac{2e_1}{e_2 - c_m} \\
+    \delta_0^m = \frac{s - 2e_1}{e_2}
+\end{gather*}
+
+Ratio will be: 
+
+\begin{gather*}
+    \frac{2 \gamma_1}{\delta_0^m} = 2 - \frac{2 s}{s - 2 e_1} \to 0
+\end{gather*}
 
 We conclude that value of this ratio depends from \(s \text{ and } \varepsilon\) and with conditions it is greater than 1 and with another it is less than 1.
 
@@ -805,12 +853,14 @@ We conclude that value of this ratio depends from \(s \text{ and } \varepsilon\)
 \end{exmp}
 
 \begin{exmp}
-    If \(s \to \frac{1}{\varepsilon}\) then \(\gamma_0, \gamma_1 \to 0\), but \(\delta_0\) decreases not so fast.
 
-    If we take \(s = 1.03, \varepsilon = 1\), then \(c_m \approxeq 2.9\) and then:
+    If \(s \to \frac{1}{\varepsilon}\) then \(\gamma_0, \gamma_1 \to 0\), but \(\delta_0^m\) decreases not so fast.
+
+    If we take \(s = 0.54, \varepsilon = 2\), then \(
+        \delta_0^m \approxeq 0.55, \gamma_1 \approxeq 0.13\) and then:
 
     \begin{align*}
-        \limd \frac{\ln(N(d))}{\ln(G(d))} \approxeq \frac{2}{3} < 1
+        \limd \frac{\ln(N(d))}{\ln(G(d))} \approxeq 0.473 < 1
     \end{align*}
 
 \end{exmp}
