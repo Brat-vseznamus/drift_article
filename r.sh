@@ -1,6 +1,6 @@
 #!/bin/bash
 
-NAME=limits
+NAME=additive-drift
 
 if [[ "$1" == "clean" ]];
 then
